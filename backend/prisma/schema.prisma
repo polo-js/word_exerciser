@@ -33,6 +33,7 @@ model Category {
 
 model ExercisesTypes {
   id          Int     @id @default(autoincrement())
+  // Упражнения/Тест
   name        String
   description String?
   icon        String?
@@ -73,11 +74,20 @@ model ExercisesProgress {
 
   passedCount Int
 
+  isReferenceMaterial String? @unique
+
   // relations
   userRel     User     @relation(fields: [user], references: [id])
   exerciseRel Exercise @relation(fields: [exercise], references: [id])
 
   @@unique([user, exercise])
+}
+
+model ReferenceMaterial {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String
+  marked      Boolean @default(false)
 }
 
 model ExercisesExpression {
@@ -88,6 +98,7 @@ model ExercisesExpression {
   translatedExample String?
   exercise          Int
   description       String?
+  // Если есть, то это у нас Фраза
   textWithSelect    String?
 
   // Связи
