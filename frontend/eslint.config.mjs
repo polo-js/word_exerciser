@@ -1,25 +1,30 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import next from '@next/eslint-plugin-next';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const prettier = require('eslint-config-prettier');
+const path = require('path');
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+export default [
   {
-    ignores: [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "build/**",
-      "next-env.d.ts",
-    ],
+    plugins: {
+      '@next/next': next,
+    },
+    rules: {
+      ...next.configs.recommended.rules,
+      ...next.configs['core-web-vitals'].rules,
+    },
+  },
+  // Добавляем Prettier конфигурацию
+  prettier,
+  {
+    rules: {
+      // Дополнительные правила, если нужно
+      'prettier/prettier': [
+        'warn',
+        {
+          // Указываем путь к конфигу Prettier на уровень выше
+          prettierOptions: require(path.resolve(__dirname, '../.prettierrc')),
+        },
+      ],
+    },
   },
 ];
-
-export default eslintConfig;
