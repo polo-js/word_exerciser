@@ -1,0 +1,32 @@
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import * as argon2 from 'argon2';
+import { JwtService } from '@nestjs/jwt';
+import { UsersService } from '../users/users.service'; // твой доступ к БД
+
+@Injectable()
+export class AuthService {
+	constructor(
+		private readonly users: UsersService,
+		private readonly jwt: JwtService
+	) {}
+
+	async login(login: string, password: string) {
+		const user = await this.users.findByLogin(login);
+		if (!user) throw new UnauthorizedException('Логин или пароль введены неверно!');
+
+		const isPasswordValid = await argon2.verify(user.passwordHash, password);
+		if (!isPasswordValid)
+			throw new UnauthorizedException('Логин или пароль введены неверно!');
+
+		const accessToken = await this.jwt.signAsync(
+			{ sub: user.id, login: user.login },
+			{ expiresIn: '10s' }
+		);
+
+		return { accessToken };
+	}
+
+	hashPassword(password: string) {
+		return argon2.hash(password);
+	}
+}

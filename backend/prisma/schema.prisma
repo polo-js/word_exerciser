@@ -10,11 +10,11 @@ generator client {
 // -------------------- Users --------------------
 
 model User {
-  id              Int     @id @default(autoincrement())
-  name            String
-  lastname        String?
-  passwordEncoded String
-  login           String
+  id           Int     @id @default(autoincrement())
+  name         String
+  lastname     String?
+  passwordHash String
+  login        String  @unique
 
   exercisesProgresses ExercisesProgress[]
 }
