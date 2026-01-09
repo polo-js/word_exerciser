@@ -16,7 +16,8 @@ model User {
   passwordHash String
   login        String  @unique
 
-  exercisesProgresses ExercisesProgress[]
+  exercisesExpressionProgress ExerciseExpressionProgress[]
+  referenceMaterialProgress   ReferenceMaterialProgress[]
 }
 
 // -------------------- Categories --------------------
@@ -58,36 +59,48 @@ model Exercise {
   categoryRel  Category       @relation(fields: [category], references: [id])
 
   expressions ExercisesExpression[]
-  progresses  ExercisesProgress[]
 }
 
 // -------------------- Exercises Progresses --------------------
 
-model ExercisesProgress {
+model ExerciseExpressionProgress {
+  id Int @id @default(autoincrement())
+
+  /// FK → Users.id
+  user Int
+
+  /// FK → ExercisesExpression.id
+  exerciseExpression Int
+
+  // relations
+  userRel     User                 @relation(fields: [user], references: [id])
+  exerciseRel ExercisesExpression? @relation(fields: [exerciseExpression], references: [id])
+
+  @@unique([user, exerciseExpression])
+}
+
+model ReferenceMaterialProgress {
   id Int @id @default(autoincrement())
 
   /// FK → Users.id
   user Int
 
   /// FK → Exercises.id
-  exercise Int
-
-  passedCount Int
-
-  isReferenceMaterial String? @unique
+  referenceMaterial Int
 
   // relations
-  userRel     User     @relation(fields: [user], references: [id])
-  exerciseRel Exercise @relation(fields: [exercise], references: [id])
+  userRel              User               @relation(fields: [user], references: [id])
+  referenceMaterialRel ReferenceMaterial? @relation(fields: [referenceMaterial], references: [id])
 
-  @@unique([user, exercise])
+  @@unique([user, referenceMaterial])
 }
 
 model ReferenceMaterial {
-  id          Int     @id @default(autoincrement())
+  id          Int    @id @default(autoincrement())
   title       String
   description String
-  marked      Boolean @default(false)
+
+  progress ReferenceMaterialProgress[]
 }
 
 model ExercisesExpression {
@@ -106,7 +119,7 @@ model ExercisesExpression {
   correctAnswer ExercisesExpressionsAnswer   @relation("CorrectAnswer", fields: [answer], references: [id])
   exerciseRel   Exercise                     @relation(fields: [exercise], references: [id])
 
-  @@map("ExercisesExpressions")
+  progress ExerciseExpressionProgress[]
 }
 
 model ExercisesExpressionsAnswer {
@@ -118,7 +131,4 @@ model ExercisesExpressionsAnswer {
 
   /// Много-ко-многим: этот вариант ответа используется как опция
   inOptionsFor ExercisesExpression[] @relation("AnswerOptions")
-
-  // Если хотите сохранить имя таблицы:
-  @@map("ExercisesExpressionsAnswer")
 }
