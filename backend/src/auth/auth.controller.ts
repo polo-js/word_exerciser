@@ -2,11 +2,11 @@ import {
 	Body,
 	Controller,
 	Get,
-	Param,
 	Post,
 	Query,
 	Req,
 	Res,
+	UnauthorizedException,
 	UseGuards,
 } from '@nestjs/common';
 import type { Response } from 'express';
@@ -15,10 +15,16 @@ import { LoginDto } from './schema/login.dto';
 import { isDevelopment } from '../const';
 import { AccessTokenGuard } from '../guards/access.token.guard';
 import { RefreshTokenGuard } from '../guards/refresh.access.guard';
+import { UsersService } from '../users/users.service';
+import type { IRequestWithToken } from '../shared/types';
+import { UserDto } from '../users/schemas/user.dto';
 
 @Controller('auth')
 export class AuthController {
-	constructor(private readonly authService: AuthService) {}
+	constructor(
+		private readonly authService: AuthService,
+		private readonly usersService: UsersService
+	) {}
 
 	@Get('test')
 	async test(@Query('password') password: string) {
@@ -26,8 +32,11 @@ export class AuthController {
 	}
 
 	@Post('login')
-	async login(@Body() dto: LoginDto, @Res({ passthrough: true }) res: Response) {
-		const { accessToken } = await this.authService.login(dto.login, dto.password);
+	async login(
+		@Body() dto: LoginDto,
+		@Res({ passthrough: true }) res: Response
+	): Promise<UserDto> {
+		const { accessToken, user } = await this.authService.login(dto.login, dto.password);
 
 		res.cookie('access_token', accessToken, {
 			httpOnly: true,
@@ -37,7 +46,7 @@ export class AuthController {
 			maxAge: 15 * 60 * 1000, // 15 минут
 		});
 
-		return true;
+		return user;
 	}
 
 	@Post('logout')
@@ -48,8 +57,12 @@ export class AuthController {
 
 	@Get('me')
 	@UseGuards(AccessTokenGuard, RefreshTokenGuard)
-	me() {
-		console.log('me');
-		return true;
+	async me(@Req() req: IRequestWithToken) {
+		const user = await this.usersService.findByLogin(req.userToken.login);
+		if (!user) {
+			throw new UnauthorizedException('No user!');
+		}
+
+		return this.usersService.getPlainUser(user);
 	}
 }

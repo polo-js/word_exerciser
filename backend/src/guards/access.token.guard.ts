@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import type { Request } from 'express';
+import { JwtPayload } from '../auth/auth.type';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
@@ -17,7 +18,7 @@ export class AccessTokenGuard implements CanActivate {
 		if (!token) throw new UnauthorizedException('No token');
 
 		try {
-			(req as any).user = await this.jwt.verifyAsync(token);
+			(req as any).userToken = await this.jwt.verifyAsync<JwtPayload>(token);
 			return true;
 		} catch {
 			throw new UnauthorizedException('Invalid token');

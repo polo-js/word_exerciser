@@ -6,24 +6,24 @@ import { UsersService } from '../users/users.service'; // твой доступ 
 @Injectable()
 export class AuthService {
 	constructor(
-		private readonly users: UsersService,
-		private readonly jwt: JwtService
+		private readonly usersService: UsersService,
+		private readonly jwtService: JwtService
 	) {}
 
 	async login(login: string, password: string) {
-		const user = await this.users.findByLogin(login);
+		const user = await this.usersService.findByLogin(login);
 		if (!user) throw new UnauthorizedException('Логин или пароль введены неверно!');
 
 		const isPasswordValid = await argon2.verify(user.passwordHash, password);
 		if (!isPasswordValid)
 			throw new UnauthorizedException('Логин или пароль введены неверно!');
 
-		const accessToken = await this.jwt.signAsync(
+		const accessToken = await this.jwtService.signAsync(
 			{ sub: user.id, login: user.login },
-			{ expiresIn: '10s' }
+			{ expiresIn: '15m' }
 		);
 
-		return { accessToken };
+		return { accessToken, user: this.usersService.getPlainUser(user) };
 	}
 
 	hashPassword(password: string) {
