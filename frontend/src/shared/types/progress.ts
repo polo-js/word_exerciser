@@ -1,8 +1,9 @@
 export interface IProgress {
 	id: number;
-	name: string;
-	category: string;
-	type: string;
-	total: number;
+	title: string;
+	description: string;
+	typeId: number;
+	imgSrc: string;
 	passed: number;
+	total: number;
 }

@@ -1,39 +1,58 @@
 import { IProgress } from '@/shared/types/progress';
-import { IoChevronForwardOutline } from 'react-icons/io5';
 import cn from 'classnames';
+import { RiLock2Line } from 'react-icons/ri';
+import { LiaAngleRightSolid } from 'react-icons/lia';
+import Image from 'next/image';
 
 interface IExerciseProgressProps {
-	progress?: IProgress;
-	isAvailable?: boolean;
+	progress: IProgress;
+	finalTestSettings?: {
+		isAvailable: boolean;
+	};
+	isReferenceMaterial?: boolean;
 }
 
-export function ExerciseProgress({ progress, isAvailable }: IExerciseProgressProps) {
-	const isFinalTest = !progress;
-	const name = isFinalTest ? 'Финальный Тест' : progress.name;
-	const category = isFinalTest ? 'Финальный тест по пройденным темам' : progress.category;
-	const counter = isFinalTest
-		? 'Доступно после 80% прогресса'
-		: `${progress.passed}/${progress.total} пройдено`;
+export function ExerciseProgress({
+	progress,
+	finalTestSettings,
+	isReferenceMaterial,
+}: IExerciseProgressProps) {
+	const isFinalTest = !!finalTestSettings;
+	const isAvailable = finalTestSettings?.isAvailable ?? true;
+	const counter = `${progress.passed}/${progress.total} ${isReferenceMaterial ? 'Просмотрено' : 'Выучено'}`;
 
 	return (
 		<div
 			className={cn([
-				'border',
-				'border-gray-600',
-				'p-5',
+				'bg-white rounded-lg',
+				'shadow-small-card',
+				'pl-6 py-4 pr-2',
+				'flex items-center justify-between',
 				isAvailable && 'cursor-pointer',
 			])}
 		>
-			<div className="flex items-center justify-between">
-				<div className="flex flex-col gap-2">
-					<div className="text-2xl">{name}</div>
-					<div>{category}</div>
+			<div className="flex gap-3">
+				<div>
+					<Image src={progress.imgSrc} alt={'IMG'} width={50} height={50} />
 				</div>
-				<div className={cn(['flex', 'self-stretch', 'items-end', 'gap-2'])}>
-					<div>{counter}</div>
-					<div className="self-start">
-						<IoChevronForwardOutline size={30} fontWeight={300} />
-					</div>
+				<div className="flex flex-col gap-1">
+					<div className="text-3xl">{progress.title}</div>
+					<div className="text-xl">{progress.description}</div>
+				</div>
+			</div>
+			<div className={cn(['flex', 'self-stretch', 'items-center', 'gap-2', 'mb-4'])}>
+				<div className="text-lg">
+					{isFinalTest ? (
+						<span className="flex gap-2 items-center justify-between">
+							<RiLock2Line />
+							<span>Закрыто</span>
+						</span>
+					) : (
+						<span>{counter}</span>
+					)}
+				</div>
+				<div>
+					<LiaAngleRightSolid size="25" />
 				</div>
 			</div>
 		</div>
