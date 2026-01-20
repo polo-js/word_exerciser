@@ -1,12 +1,24 @@
-import { requireAuth } from '@/shared/utils/auth';
-import { MainWrapper } from '@/app/(auth)/_components/main.wrapper';
+import { MainWrapper } from '@/shared/ui/wrapper';
+import { getAuth } from '@/shared/utils/auth';
+import { AuthController } from '@/app/(auth)/_components/auth.controller';
+import { redirect } from 'next/navigation';
 
 export default async function Layout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	await requireAuth();
+	const { user } = await getAuth();
 
-	return <MainWrapper>{children}</MainWrapper>;
+	if (!user) {
+		redirect('/login');
+	}
+
+	return (
+		<AuthController initialUser={user}>
+			<MainWrapper className="items-center" fullHeight withHeader>
+				{children}
+			</MainWrapper>
+		</AuthController>
+	);
 }

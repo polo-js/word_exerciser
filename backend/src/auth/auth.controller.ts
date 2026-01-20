@@ -50,14 +50,14 @@ export class AuthController {
 	}
 
 	@Post('logout')
-	logout(@Res({ passthrough: true }) res: Response) {
+	logout(@Res({ passthrough: true }) res: Response): boolean {
 		res.clearCookie('access_token', { path: '/' });
 		return true;
 	}
 
 	@Get('me')
 	@UseGuards(AccessTokenGuard, RefreshTokenGuard)
-	async me(@Req() req: IRequestWithToken) {
+	async me(@Req() req: IRequestWithToken): Promise<UserDto> {
 		const user = await this.usersService.findByLogin(req.userToken.login);
 		if (!user) {
 			throw new UnauthorizedException('No user!');

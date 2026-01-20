@@ -1,20 +1,24 @@
 'use client';
 import { IUser } from '@/shared/types/user';
-import { useLayoutEffect } from 'react';
-import { userServiceStore } from '@/pages-content/login';
+import { createContext } from 'react';
 
 interface IAuthControllerProps extends React.PropsWithChildren {
-	initialUser?: IUser;
+	initialUser: IUser;
 }
 
-export function AuthController({ children, initialUser }: IAuthControllerProps) {
-	useLayoutEffect(() => {
-		if (initialUser) {
-			userServiceStore.setUser(initialUser);
-		} else {
-			userServiceStore.clearUser();
-		}
-	}, [initialUser]);
+interface IAuthContext {
+	user: IUser;
+}
 
-	return <>{children}</>;
+export const AuthContext = createContext<IAuthContext>({
+	user: {
+		login: 'example',
+		name: 'example',
+	},
+});
+
+export function AuthController({ children, initialUser }: IAuthControllerProps) {
+	return (
+		<AuthContext.Provider value={{ user: initialUser }}>{children}</AuthContext.Provider>
+	);
 }

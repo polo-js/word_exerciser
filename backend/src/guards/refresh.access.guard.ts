@@ -31,7 +31,7 @@ export class RefreshTokenGuard implements CanActivate {
 
 		const newToken = await this.jwt.signAsync(
 			{ sub: user.sub, login: user.login },
-			{ expiresIn: '1000m' }
+			{ expiresIn: '10000m' }
 		);
 
 		res.cookie('access_token', newToken, {

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserDto } from './schemas/user.dto';
-import { plainToInstance } from 'class-transformer';
 import { User } from '@prisma/client';
+import { plainObjectToDTO } from '../shared/utils';
 
 @Injectable()
 export class UsersService {
@@ -15,6 +15,6 @@ export class UsersService {
 	}
 
 	getPlainUser(user: User): UserDto {
-		return plainToInstance(UserDto, user);
+		return plainObjectToDTO(UserDto, user);
 	}
 }

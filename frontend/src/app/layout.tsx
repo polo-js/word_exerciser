@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 	description: 'Zalupa',
 };
 
-export default async function RootLayout({
+export default function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
@@ -31,7 +31,7 @@ export default async function RootLayout({
 					'items-center',
 					'text-base',
 					'text-gray-800',
-					'bg-gray-100',
+					'bg-gray-100'
 				)}
 			>
 				{children}

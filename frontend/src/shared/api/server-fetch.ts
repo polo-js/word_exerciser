@@ -2,11 +2,16 @@ import { TResponse } from '@/shared/types/api';
 import { API_URL, isDevelopment, isWeb } from '@/const';
 import { userServiceStore } from '@/pages-content/login';
 import { toast } from 'sonner';
+import { redirect } from 'next/navigation';
+
+interface IRequest extends RequestInit {
+	disableRedirectToLogin?: boolean;
+}
 
 // СЕРВЕРНЫЙ ФЕТЧ НЕ ОБОРАЧИВАЕМ В try/catch!!
 export async function serverFetch<Result>(
 	input: string,
-	init?: RequestInit
+	init?: IRequest
 ): Promise<TResponse<Result>> {
 	try {
 		const res = await fetch(API_URL + input, init);
@@ -18,9 +23,9 @@ export async function serverFetch<Result>(
 
 		return json as TResponse<Result>;
 		// @ts-ignore
-	} catch (e: TResponse<null> | Error) {
+	} catch (e: any) {
 		if (isDevelopment || !isWeb) {
-			console.log(e.error?.message);
+			console.log(e.error ? (e.error.message ? e.error.message : e.error) : e);
 		}
 
 		if (isWeb) {
@@ -34,9 +39,19 @@ export async function serverFetch<Result>(
 			}
 		}
 
-		return {
-			success: false,
-			result: null,
-		};
+		if (!init?.disableRedirectToLogin) {
+			redirect('/login');
+		}
+
+		return e instanceof Error
+			? {
+					success: false,
+					result: null,
+				}
+			: {
+					success: false,
+					result: null,
+					code: e.code,
+				};
 	}
 }

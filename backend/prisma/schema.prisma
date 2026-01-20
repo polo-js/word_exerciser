@@ -73,8 +73,8 @@ model ExerciseExpressionProgress {
   exerciseExpression Int
 
   // relations
-  userRel     User                 @relation(fields: [user], references: [id])
-  exerciseRel ExercisesExpression? @relation(fields: [exerciseExpression], references: [id])
+  userRel                User                 @relation(fields: [user], references: [id])
+  exercisesExpressionRel ExercisesExpression? @relation(fields: [exerciseExpression], references: [id])
 
   @@unique([user, exerciseExpression])
 }
@@ -96,9 +96,11 @@ model ReferenceMaterialProgress {
 }
 
 model ReferenceMaterial {
-  id          Int    @id @default(autoincrement())
-  title       String
-  description String
+  id              Int    @id @default(autoincrement())
+  title           String
+  description     String
+  hrefToMaterials String
+  imgSrc          String
 
   progress ReferenceMaterialProgress[]
 }

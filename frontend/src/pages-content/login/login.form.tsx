@@ -14,7 +14,7 @@ export function LoginForm() {
 
 	return (
 		<Form.Root onSubmit={handleSubmit}>
-			<div className="border border-gray-200 p-9">
+			<div className="border border-gray-200 bg-gray-50 p-9 shadow-small-card">
 				<div className="flex justify-center items-center flex-col pb-10 uppercase">
 					<div className="font-bold pb-1">Закупочный английский</div>
 					<hr className="self-stretch" />
@@ -36,7 +36,7 @@ export function LoginForm() {
 							Заполните логин
 						</Form.Message>
 					</Form.Field>
-					<Form.Field name="password" className="flex flex-col pt-6">
+					<Form.Field name="password" className="flex flex-col mt-6">
 						<Form.Label>Пароль</Form.Label>
 						<Form.Control
 							required
@@ -51,9 +51,9 @@ export function LoginForm() {
 							Заполните пароль
 						</Form.Message>
 					</Form.Field>
-					<div className="pt-6 flex justify-center">
+					<div className="mt-10 flex justify-center">
 						<Form.Submit asChild>
-							<button className="border border-b-gray-800 px-3 py-2 cursor-pointer">
+							<button className="text-white rounded-sm w-full bg-blue-600 px-3 py-2 cursor-pointer">
 								Войти
 							</button>
 						</Form.Submit>

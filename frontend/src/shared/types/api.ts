@@ -1,4 +1,4 @@
-export type TResponse<Result = unknown> =
+export type TResponse<Result> =
 	| {
 			success: true;
 			result: Result;

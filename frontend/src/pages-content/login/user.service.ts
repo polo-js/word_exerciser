@@ -5,21 +5,9 @@ import { IUser } from '@/shared/types/user';
 import { BaseStore } from '@/shared/lib/base.store';
 import { serverFetch } from '@/shared/api/server-fetch';
 
-interface IState {
-	user: IUser | null;
-}
-
-class UserService extends BaseStore<IState> {
+class UserService extends BaseStore<object> {
 	constructor() {
-		super({ user: null });
-	}
-
-	setUser(user: IUser) {
-		this.setState({ user });
-	}
-
-	clearUser() {
-		this.setState({ user: null });
+		super({});
 	}
 
 	async login(
@@ -34,7 +22,6 @@ class UserService extends BaseStore<IState> {
 		});
 
 		if (result.success) {
-			this.setUser(result.result);
 			redirect(redirectTo ?? '/profile');
 		} else {
 			toast.error(result.error?.message ?? 'Ошибка авторизации');
@@ -46,7 +33,6 @@ class UserService extends BaseStore<IState> {
 			method: 'POST',
 			credentials: 'include',
 		});
-		this.clearUser();
 	}
 }
 
