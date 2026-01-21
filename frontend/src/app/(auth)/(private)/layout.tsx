@@ -3,6 +3,8 @@ import { getAuth } from '@/shared/utils/auth';
 import { AuthController } from '@/app/(auth)/_components/auth.controller';
 import { redirect } from 'next/navigation';
 
+export const fetchCache = 'force-no-store'
+
 export default async function Layout({
 	children,
 }: Readonly<{
@@ -16,7 +18,7 @@ export default async function Layout({
 
 	return (
 		<AuthController initialUser={user}>
-			<MainWrapper className="items-center" fullHeight withHeader>
+			<MainWrapper className="items-start" fullHeight withHeader>
 				{children}
 			</MainWrapper>
 		</AuthController>

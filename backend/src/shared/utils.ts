@@ -1,11 +1,13 @@
-import { ClassConstructor, plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { isDevelopment } from '../const';
 import { HttpException, InternalServerErrorException } from '@nestjs/common';
 
-export function plainObjectToDTO<T>(dto: ClassConstructor<T>, obj: object): T {
-	return plainToInstance(dto, obj, {
+type Ctor<T> = new () => T;
+
+export function plainObjectToDTO<T, V>(dto: Ctor<T>, obj: V): V extends any[] ? T[] : T {
+	return plainToInstance(dto, obj as any, {
 		excludeExtraneousValues: true,
-	});
+	}) as any;
 }
 
 type HttpExceptionCtor = new (...args: any[]) => HttpException;

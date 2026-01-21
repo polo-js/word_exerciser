@@ -1,10 +1,10 @@
 import { serverFetch } from '@/shared/api/server-fetch';
 import { headers } from 'next/headers';
-import { IMaterialsInfoDto, MaterialsInfo } from '@/pages-content/materials';
+import { IMaterialDto, MaterialsInfo } from '@/pages-content/materials';
 
 export default async function Page() {
 	const cookieHeader = (await headers()).get('cookie') ?? '';
-	const materialsInfo = await serverFetch<IMaterialsInfoDto>('/materials', {
+	const materialsInfo = await serverFetch<IMaterialDto[]>('/materials', {
 		method: 'GET',
 		headers: {
 			cookie: cookieHeader,

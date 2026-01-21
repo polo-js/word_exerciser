@@ -17,7 +17,6 @@ class UserService extends BaseStore<object> {
 		const result = await serverFetch<IUser>('/auth/login', {
 			method: 'POST',
 			body: JSON.stringify(new UserLoginDto(userForm).toServer()),
-			headers: { 'Content-Type': 'application/json' },
 			credentials: 'include',
 		});
 

@@ -14,7 +14,15 @@ export async function serverFetch<Result>(
 	init?: IRequest
 ): Promise<TResponse<Result>> {
 	try {
-		const res = await fetch(API_URL + input, init);
+		const res = await fetch(API_URL + input, {
+			...init,
+			headers: {
+				...init?.headers,
+				'Content-Type':
+					(init?.headers as Record<string, string> | undefined)?.['Content-Type'] ??
+					'application/json',
+			},
+		});
 		const json = (await res.json()) as TResponse<Result> | TResponse<null>;
 
 		if (!json.success) {
@@ -25,7 +33,7 @@ export async function serverFetch<Result>(
 		// @ts-ignore
 	} catch (e: any) {
 		if (isDevelopment || !isWeb) {
-			console.log(e.error ? (e.error.message ? e.error.message : e.error) : e);
+			console.error(e.error ? (e.error.message ? e.error.message : e.error) : e);
 		}
 
 		if (isWeb) {
@@ -36,11 +44,11 @@ export async function serverFetch<Result>(
 
 			if (e.code === 401) {
 				void userServiceStore.logout();
-			}
-		}
 
-		if (!init?.disableRedirectToLogin) {
-			redirect('/login');
+				if (!init?.disableRedirectToLogin) {
+					redirect('/login');
+				}
+			}
 		}
 
 		return e instanceof Error

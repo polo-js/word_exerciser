@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { MaterialDto, MaterialsInfoDto } from './schemas/materials.dto';
+import { MaterialDto } from './schemas/materials.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { ProgressService } from '../progress/progress.service';
-import { handleError, plainObjectToDTO } from '../shared/utils';
+import { handleError } from '../shared/utils';
 import { ReferenceMaterial } from '@prisma/client';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class MaterialsService {
 		private readonly progressService: ProgressService
 	) {}
 
-	async getMaterialsInfo(userLogin: string): Promise<MaterialsInfoDto> {
+	async getMaterialsInfo(userLogin: string): Promise<MaterialDto[]> {
 		const user = await this.usersService.findByLogin(userLogin);
 		if (!user) {
 			throw new NotFoundException('User not found');
@@ -31,22 +31,12 @@ export class MaterialsService {
 			materialsProgress.length = materialsCount;
 		}
 
-		const materials: MaterialDto[] = materialList.map(
-			(material: ReferenceMaterial): MaterialDto => {
-				const marked = materialsProgress.some(({ id }) => material.id === id);
-				return { ...material, marked };
-			}
-		);
-		const progress: number = materialsCount
-			? materialsProgress.length / materialsCount * 100
-			: 0;
-
-		const result: MaterialsInfoDto = {
-			progress,
-			materials,
-		};
-
-		return plainObjectToDTO(MaterialsInfoDto, result);
+		return materialList.map((material: ReferenceMaterial): MaterialDto => {
+			const marked = materialsProgress.some(
+				({ referenceMaterial }) => material.id === referenceMaterial
+			);
+			return { ...material, marked };
+		});
 	}
 
 	getMaterials(): Promise<ReferenceMaterial[]> {

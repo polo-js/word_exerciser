@@ -24,7 +24,8 @@
     "migrate:dev": "dotenv -e .development.env -- npx prisma migrate dev",
     "migrate:prod": "dotenv -e .production.env -- npx prisma migrate deploy",
     "migrate:reset": "dotenv -e .development.env -- npx prisma migrate reset",
-    "-----|-----": ""
+    "-----|-----": "",
+    "seed": "dotenv -e .development.env -- ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

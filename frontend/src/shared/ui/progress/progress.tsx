@@ -1,6 +1,6 @@
 import cn from 'classnames';
 import { Progress } from 'radix-ui';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface IProgressProps {
 	percent: number;
@@ -8,15 +8,21 @@ interface IProgressProps {
 
 export function ProgressLine({ percent }: IProgressProps) {
 	const [currentProgress, setCurrentProgress] = useState<number>(0);
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			setCurrentProgress(percent);
-		}, 300);
+	const isFirst = useRef(true);
 
-		return () => {
-			clearTimeout(timer);
-		};
-	}, []);
+	useEffect(() => {
+		if (isFirst.current) {
+			isFirst.current = false;
+
+			const timer = setTimeout(() => {
+				setCurrentProgress(percent);
+			}, 100);
+
+			return () => clearTimeout(timer);
+		}
+
+		setCurrentProgress(percent);
+	}, [percent]);
 
 	return (
 		<Progress.Root

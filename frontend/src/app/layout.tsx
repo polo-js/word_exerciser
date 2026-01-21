@@ -31,7 +31,8 @@ export default function RootLayout({
 					'items-center',
 					'text-base',
 					'text-gray-800',
-					'bg-gray-100'
+					'bg-gray-100',
+					'py-8'
 				)}
 			>
 				{children}

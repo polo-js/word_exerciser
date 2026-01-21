@@ -87,6 +87,69 @@ export class ProgressService {
 		});
 	}
 
+	async setMaterialProgress({ id, userLogin }: { id: number; userLogin: string }) {
+		const materialReference = await this.prismaService.referenceMaterial.findUnique({
+			where: { id },
+		});
+
+		if (!materialReference) {
+			throw new NotFoundException('Material reference does not exist');
+		}
+
+		const user = await this.prismaService.user.findUnique({
+			where: {
+				login: userLogin,
+			},
+		});
+
+		if (!user) {
+			throw new NotFoundException('User does not exist');
+		}
+
+		return this.prismaService.referenceMaterialProgress.upsert({
+			where: {
+				user_referenceMaterial: {
+					user: user.id,
+					referenceMaterial: id,
+				},
+			},
+			update: {}, // ничего не обновляем
+			create: {
+				user: user.id,
+				referenceMaterial: id,
+			},
+		});
+	}
+
+	async deleteMaterialProgress({ id, userLogin }: { id: number; userLogin: string }) {
+		const materialReference = await this.prismaService.referenceMaterial.findUnique({
+			where: { id },
+		});
+
+		if (!materialReference) {
+			throw new NotFoundException('Material reference does not exist');
+		}
+
+		const user = await this.prismaService.user.findUnique({
+			where: {
+				login: userLogin,
+			},
+		});
+
+		if (!user) {
+			throw new NotFoundException('User does not exist');
+		}
+
+		return this.prismaService.referenceMaterialProgress.delete({
+			where: {
+				user_referenceMaterial: {
+					referenceMaterial: id,
+					user: user.id,
+				},
+			},
+		});
+	}
+
 	getReferenceMaterialProgress(userId: number): Promise<ReferenceMaterialProgress[]> {
 		return this.prismaService.referenceMaterialProgress.findMany({
 			where: {

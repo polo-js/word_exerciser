@@ -1,8 +1,3 @@
-export interface IMaterialsInfoDto {
-	progress: number;
-	materials: IMaterialDto[];
-}
-
 export interface IMaterialDto {
 	id: number;
 	title: string;
