@@ -20,16 +20,6 @@ model User {
   referenceMaterialProgress   ReferenceMaterialProgress[]
 }
 
-// -------------------- Categories --------------------
-
-model Category {
-  id       Int     @id @default(autoincrement())
-  name     String
-  imageSrc String?
-
-  exercises Exercise[]
-}
-
 // -------------------- Exercises Types --------------------
 
 model ExercisesTypes {
@@ -52,11 +42,10 @@ model Exercise {
   type Int
 
   /// FK → Categories.id
-  category Int
+  imgSrc String
 
   // relations
   exerciseType ExercisesTypes @relation(fields: [type], references: [id])
-  categoryRel  Category       @relation(fields: [category], references: [id])
 
   expressions ExercisesExpression[]
 }
@@ -73,8 +62,8 @@ model ExerciseExpressionProgress {
   exerciseExpression Int
 
   // relations
-  userRel                User                 @relation(fields: [user], references: [id])
-  exercisesExpressionRel ExercisesExpression? @relation(fields: [exerciseExpression], references: [id])
+  userRel                User                @relation(fields: [user], references: [id])
+  exercisesExpressionRel ExercisesExpression @relation(fields: [exerciseExpression], references: [id])
 
   @@unique([user, exerciseExpression])
 }
@@ -108,7 +97,6 @@ model ReferenceMaterial {
 model ExercisesExpression {
   id                Int     @id @default(autoincrement())
   expression        String
-  answer            Int
   example           String?
   translatedExample String?
   exercise          Int
@@ -116,9 +104,10 @@ model ExercisesExpression {
   // Если есть, то это у нас Фраза
   textWithSelect    String?
 
+  correctAnswerId Int
+
   // Связи
   answerOptions ExercisesExpressionsAnswer[] @relation("AnswerOptions")
-  correctAnswer ExercisesExpressionsAnswer   @relation("CorrectAnswer", fields: [answer], references: [id])
   exerciseRel   Exercise                     @relation(fields: [exercise], references: [id])
 
   progress ExerciseExpressionProgress[]
@@ -127,9 +116,6 @@ model ExercisesExpression {
 model ExercisesExpressionsAnswer {
   id         Int    @id @default(autoincrement())
   expression String
-
-  /// Правильный ответ (one-to-many)
-  correctFor ExercisesExpression[] @relation("CorrectAnswer")
 
   /// Много-ко-многим: этот вариант ответа используется как опция
   inOptionsFor ExercisesExpression[] @relation("AnswerOptions")

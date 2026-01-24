@@ -17,7 +17,7 @@ import { AccessTokenGuard } from '../guards/access.token.guard';
 import { RefreshTokenGuard } from '../guards/refresh.access.guard';
 import { UsersService } from '../users/users.service';
 import type { IRequestWithToken } from '../shared/types';
-import { UserDto } from '../users/schemas/user.dto';
+import { UserDto } from '../users/schema/user.dto';
 
 @Controller('auth')
 export class AuthController {

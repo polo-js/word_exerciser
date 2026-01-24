@@ -22,6 +22,7 @@ export async function serverFetch<Result>(
 					(init?.headers as Record<string, string> | undefined)?.['Content-Type'] ??
 					'application/json',
 			},
+			credentials: init?.credentials || 'include',
 		});
 		const json = (await res.json()) as TResponse<Result> | TResponse<null>;
 

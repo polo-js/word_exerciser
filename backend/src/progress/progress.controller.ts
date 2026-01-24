@@ -3,8 +3,8 @@ import { ProgressService } from './progress.service';
 import { RefreshTokenGuard } from '../guards/refresh.access.guard';
 import { AccessTokenGuard } from '../guards/access.token.guard';
 import type { IRequestWithToken } from '../shared/types';
-import { ProfileProgressDto } from './schemas/profile-progress.dto';
-import { MaterialProgressDto } from './schemas/materials.dto';
+import { ProfileProgressDto } from './schema/profile-progress.dto';
+import { MaterialProgressDto } from './schema/materials.dto';
 
 @Controller('progress')
 @UseGuards(AccessTokenGuard, RefreshTokenGuard)

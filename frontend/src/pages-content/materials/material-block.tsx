@@ -23,7 +23,8 @@ export function MaterialBlock({ material, onValueChange }: IMaterialBlockProps) 
 				'shadow-small-card pt-6 pb-4 px-4',
 				'flex flex-col gap-2 justify-between',
 				'w-full h-full',
-				'cursor-pointer',
+				'rounded-md',
+				'cursor-pointer'
 			)}
 			onClick={() => {
 				router.push(material.hrefToMaterials);

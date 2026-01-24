@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { MaterialDto } from './schemas/materials.dto';
+import { MaterialDto } from './schema/materials.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { ProgressService } from '../progress/progress.service';
 import { handleError } from '../shared/utils';

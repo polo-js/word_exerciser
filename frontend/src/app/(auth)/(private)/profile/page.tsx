@@ -16,11 +16,7 @@ export default async function Page() {
 	);
 
 	if (!progressResult.success) {
-		return (
-			<h1 className="text-3xl min-h-[720px] flex items-center justify-center">
-				Не удалось загрузить профиль. Попробуй позднее
-			</h1>
-		);
+		throw new Error();
 	}
 
 	return <Profile progress={progressResult.result} />;

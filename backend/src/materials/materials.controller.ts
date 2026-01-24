@@ -2,7 +2,7 @@ import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { AccessTokenGuard } from '../guards/access.token.guard';
 import { RefreshTokenGuard } from '../guards/refresh.access.guard';
 import type { IRequestWithToken } from '../shared/types';
-import { MaterialDto } from './schemas/materials.dto';
+import { MaterialDto } from './schema/materials.dto';
 import { MaterialsService } from './materials.service';
 
 @Controller('materials')

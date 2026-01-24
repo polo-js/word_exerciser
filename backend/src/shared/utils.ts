@@ -4,10 +4,10 @@ import { HttpException, InternalServerErrorException } from '@nestjs/common';
 
 type Ctor<T> = new () => T;
 
-export function plainObjectToDTO<T, V>(dto: Ctor<T>, obj: V): V extends any[] ? T[] : T {
-	return plainToInstance(dto, obj as any, {
+export function plainObjectToDTO<T>(dto: Ctor<T>, obj: T) {
+	return plainToInstance<T, T>(dto, obj, {
 		excludeExtraneousValues: true,
-	}) as any;
+	});
 }
 
 type HttpExceptionCtor = new (...args: any[]) => HttpException;

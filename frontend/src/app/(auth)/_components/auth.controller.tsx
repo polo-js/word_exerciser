@@ -7,14 +7,10 @@ interface IAuthControllerProps extends React.PropsWithChildren {
 }
 
 interface IAuthContext {
-	user: IUser;
+	user?: IUser;
 }
 
 export const AuthContext = createContext<IAuthContext>({
-	user: {
-		login: 'example',
-		name: 'example',
-	},
 });
 
 export function AuthController({ children, initialUser }: IAuthControllerProps) {

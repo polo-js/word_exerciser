@@ -1,6 +1,7 @@
 // prisma/seed.ts
 import { PrismaClient } from '@prisma/client';
 import readline from 'readline';
+import { EXERCISES_TYPE } from '../src/exercises/const';
 
 async function confirm(question: string): Promise<boolean> {
 	const rl = readline.createInterface({
@@ -24,7 +25,6 @@ async function main() {
 	// =========================
 	const [
 		userCount,
-		categoryCount,
 		exercisesTypesCount,
 		exerciseCount,
 		exercisesExpressionCount,
@@ -34,7 +34,6 @@ async function main() {
 		referenceMaterialProgressCount,
 	] = await Promise.all([
 		prisma.user.count(),
-		prisma.category.count(),
 		prisma.exercisesTypes.count(),
 		prisma.exercise.count(),
 		prisma.exercisesExpression.count(),
@@ -46,7 +45,6 @@ async function main() {
 
 	console.log('📊 Текущее состояние базы данных:');
 	console.log(`  Users:                        ${userCount}`);
-	console.log(`  Categories:                   ${categoryCount}`);
 	console.log(`  ExercisesTypes:               ${exercisesTypesCount}`);
 	console.log(`  Exercises:                    ${exerciseCount}`);
 	console.log(`  ExercisesExpression:          ${exercisesExpressionCount}`);
@@ -73,7 +71,6 @@ async function main() {
 
 		await prisma.exercise.deleteMany();
 		await prisma.exercisesTypes.deleteMany();
-		await prisma.category.deleteMany();
 
 		await prisma.referenceMaterial.deleteMany();
 		await prisma.user.deleteMany();
@@ -98,57 +95,232 @@ async function main() {
 		},
 	});
 
-	// --- Category ---
-	const category = await prisma.category.create({
-		data: {
-			name: 'name',
-			imageSrc: 'imageSrc',
-		},
-	});
-
 	// --- ExercisesTypes ---
-	const exerciseType = await prisma.exercisesTypes.create({
-		data: {
-			name: 'name',
-			description: 'description',
-			icon: 'icon',
-		},
+	const exerciseType = await prisma.exercisesTypes.createMany({
+		data: [
+			{
+				id: EXERCISES_TYPE.TERMS,
+				name: 'Термины',
+				description: 'description',
+				icon: 'icon',
+			},
+			{
+				id: EXERCISES_TYPE.PHRASES,
+				name: 'Фразы',
+				description: 'description',
+				icon: 'icon',
+			},
+		],
 	});
 
 	// --- Exercise (+ 1 Expression + Answers) ---
-	const exercise = await prisma.exercise.create({
-		data: {
-			name: 'name',
-			exerciseType: { connect: { id: exerciseType.id } }, // FK type
-			categoryRel: { connect: { id: category.id } }, // FK category
-			expressions: {
-				create: [
-					{
-						expression: 'expression',
-						example: 'example',
-						translatedExample: 'translatedExample',
-						description: 'description',
-						textWithSelect: 'textWithSelect',
+	const exercisesData = [
+		{
+			data: {
+				name: 'Руки и чайники',
+				exerciseType: { connect: { id: EXERCISES_TYPE.TERMS } },
+				imgSrc: '/assets/img/book.svg',
+				expressions: {
+					create: [
+						{
+							expression: 'expression1',
+							example: 'example',
+							translatedExample: 'translatedExample',
+							description: 'description',
 
-						// required relation via `answer` field
-						correctAnswer: {
-							create: { expression: 'expression' },
-						},
+							// required relation via `answer` field
+							correctAnswerId: 1,
 
-						// m2m options
-						answerOptions: {
-							create: [{ expression: 'expression' }],
+							// m2m options
+							answerOptions: {
+								create: [
+									{ id: 1, expression: 'expression1' },
+									{ id: 2, expression: 'expression2' },
+									{
+										id: 3,
+										expression: 'expression3',
+									},
+									{ id: 4, expression: 'expression4' },
+								],
+							},
 						},
-					},
-				],
+						{
+							expression: 'expression2',
+							example: 'example',
+							translatedExample: 'translatedExample',
+							description: 'description',
+
+							// required relation via `answer` field
+							correctAnswerId: 6,
+
+							// m2m options
+							answerOptions: {
+								create: [
+									{ id: 5, expression: 'expression1' },
+									{ id: 6, expression: 'expression2' },
+									{
+										id: 7,
+										expression: 'expression3',
+									},
+									{ id: 8, expression: 'expression4' },
+								],
+							},
+						},
+						{
+							expression: 'expression3',
+							example: 'example',
+							translatedExample: 'translatedExample',
+							description: 'description',
+
+							correctAnswerId: 11,
+
+							// m2m options
+							answerOptions: {
+								create: [
+									{ id: 9, expression: 'expression1' },
+									{ id: 10, expression: 'expression2' },
+									{
+										id: 11,
+										expression: 'expression3',
+									},
+									{ id: 12, expression: 'expression4' },
+								],
+							},
+						},
+						{
+							expression: 'expression4',
+							example: 'example',
+							translatedExample: 'translatedExample',
+							description: 'description',
+
+							// required relation via `answer` field
+							correctAnswerId: 15,
+
+							// m2m options
+							answerOptions: {
+								create: [
+									{ id: 13, expression: 'expression1' },
+									{ id: 14, expression: 'expression2' },
+									{
+										id: 15,
+										expression: 'expression3',
+									},
+									{ id: 16, expression: 'expression4' },
+								],
+							},
+						},
+						{
+							expression: 'expression5',
+							example: 'example',
+							translatedExample: 'translatedExample',
+							description: 'description',
+							textWithSelect: 'textWithSelect',
+
+							// required relation via `answer` field
+							correctAnswerId: 17,
+
+							// m2m options
+							answerOptions: {
+								create: [
+									{ id: 17, expression: 'expression1' },
+									{ id: 18, expression: 'expression2' },
+									{
+										id: 19,
+										expression: 'expression3',
+									},
+									{ id: 20, expression: 'expression4' },
+								],
+							},
+						},
+					],
+				},
+			},
+			include: {
+				expressions: { select: { id: true } },
 			},
 		},
-		include: {
-			expressions: { select: { id: true } },
-		},
-	});
+		{
+			data: {
+				name: 'Name2',
+				exerciseType: { connect: { id: EXERCISES_TYPE.TERMS } },
+				imgSrc: '/assets/img/book.svg',
+				expressions: {
+					create: [
+						{
+							expression: 'expression1',
+							example: 'example',
+							translatedExample: 'translatedExample',
+							description: 'description',
 
-	const expressionId = exercise.expressions[0]?.id;
+							// required relation via `answer` field
+							correctAnswerId: 100,
+
+							// m2m options
+							answerOptions: {
+								create: [
+									{ id: 100, expression: 'expression1' },
+									{ id: 101, expression: 'expression2' },
+									{
+										id: 102,
+										expression: 'expression3',
+									},
+									{ id: 103, expression: 'expression4' },
+								],
+							},
+						},
+					],
+				},
+			},
+			include: {
+				expressions: { select: { id: true } },
+			},
+		},
+		{
+			data: {
+				name: 'Name3',
+				exerciseType: { connect: { id: EXERCISES_TYPE.TERMS } },
+				imgSrc: '/assets/img/book.svg',
+				expressions: {
+					create: [
+						{
+							expression: 'expression1',
+							example: 'example',
+							translatedExample: 'translatedExample',
+							description: 'description',
+
+							// required relation via `answer` field
+							correctAnswerId: 200,
+
+							// m2m options
+							answerOptions: {
+								create: [
+									{ id: 200, expression: 'expression1' },
+									{ id: 201, expression: 'expression2' },
+									{
+										id: 202,
+										expression: 'expression3',
+									},
+									{ id: 203, expression: 'expression4' },
+								],
+							},
+						},
+					],
+				},
+			},
+			include: {
+				expressions: { select: { id: true } },
+			},
+		},
+	];
+
+	const exercises = await prisma.$transaction(
+		exercisesData.map(({ data }) =>
+			prisma.exercise.create({
+				data,
+				include: { expressions: { select: { id: true } } },
+			})
+		)
+	);
 
 	// --- ReferenceMaterial ---
 	const referenceMaterial = await prisma.referenceMaterial.createMany({
@@ -201,9 +373,8 @@ async function main() {
 	// 4) Финальный статус (как в примере)
 	// =========================
 	console.log('✅ Seed завершён. Создан пользователь:', user.login);
-	console.log('✅ Seed завершён. Создана категория:', category.name);
-	console.log('✅ Seed завершён. Создан тип упражнения:', exerciseType.name);
-	console.log('✅ Seed завершён. Создано упражнение:', exercise.name);
+	console.log('✅ Seed завершён. Создан тип упражнения:', exerciseType.count);
+	console.log('✅ Seed завершён. Создано упражнение:', exercises.length);
 	console.log('✅ Seed завершён. Создан материал:', referenceMaterial.count);
 }
 

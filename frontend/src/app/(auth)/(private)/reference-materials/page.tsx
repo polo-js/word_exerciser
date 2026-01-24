@@ -12,11 +12,7 @@ export default async function Page() {
 	});
 
 	if (!materialsInfo.success) {
-		return (
-			<h1 className="text-3xl min-h-[720px] flex items-center justify-center">
-				Не удалось загрузить справочный материал. Попробуй позднее
-			</h1>
-		);
+		throw new Error();
 	}
 
 	return <MaterialsInfo materialsInfo={materialsInfo.result} />;

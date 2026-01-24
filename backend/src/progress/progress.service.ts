@@ -4,8 +4,8 @@ import {
 	NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { ProgressDto } from './schemas/progress.dto';
-import { ProfileProgressDto } from './schemas/profile-progress.dto';
+import { ProgressDto } from './schema/progress.dto';
+import { ProfileProgressDto } from './schema/profile-progress.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import {
 	EXERCISES_PHRASES_TYPE,

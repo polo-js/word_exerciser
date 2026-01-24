@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ProgressModule } from './progress/progress.module';
 import { MaterialsModule } from './materials/materials.module';
+import { ExercisesModule } from './exercises/exercises.module';
 
 @Module({
 	imports: [
@@ -17,6 +18,7 @@ import { MaterialsModule } from './materials/materials.module';
 			envFilePath: `.${process.env.NODE_ENV ?? 'development'}.env`,
 			isGlobal: true,
 		}),
+		ExercisesModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
