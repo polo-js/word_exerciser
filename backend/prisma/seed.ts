@@ -322,7 +322,7 @@ async function main() {
 					create: [
 						{
 							expression: 'expression1',
-							example: 'example',
+							example: 'example |zopa|',
 							translatedExample: 'translatedExample',
 							description: 'description',
 

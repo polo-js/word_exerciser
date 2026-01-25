@@ -187,7 +187,7 @@ export function ExpressionsCard({
 				<div className="text-gray-600 flex flex-col gap-5 mt-4">
 					<div className="text-3xl">
 						<span>Пример: </span>
-						<span>{renderBoldFromPipes('abober |zopa| and |zopa|')}</span>
+						<span>{renderBoldFromPipes(currentExpression.example)}</span>
 					</div>
 					<div className="text-3xl">
 						{renderBoldFromPipes(currentExpression.translatedExample)}
