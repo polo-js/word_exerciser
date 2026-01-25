@@ -25,7 +25,7 @@ export function MaterialsInfo({ materialsInfo }: IMaterialsInfoProps) {
 
 	const materialInfoCheckHandler = (id: number, checked: boolean) => {
 		if (checked) {
-			void materialsService.setMaterialProgress(id);
+			void materialsService.addMaterialProgress(id);
 		} else {
 			void materialsService.deleteMaterialProgress(id);
 		}

@@ -2,7 +2,7 @@ import { serverFetch } from '@/shared/api/server-fetch';
 import { toast } from 'sonner';
 
 class MaterialsService {
-	async setMaterialProgress(id: number): Promise<void> {
+	async addMaterialProgress(id: number): Promise<void> {
 		const res = await serverFetch('/progress/add-materials-progress', {
 			method: 'POST',
 			credentials: 'include',

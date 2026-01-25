@@ -115,6 +115,7 @@ async function main() {
 
 	// --- Exercise (+ 1 Expression + Answers) ---
 	const exercisesData = [
+		// ТЕРМИНЫ
 		{
 			data: {
 				name: 'Руки и чайники',
@@ -194,7 +195,7 @@ async function main() {
 							description: 'description',
 
 							// required relation via `answer` field
-							correctAnswerId: 15,
+							correctAnswerId: 16,
 
 							// m2m options
 							answerOptions: {
@@ -301,6 +302,131 @@ async function main() {
 										expression: 'expression3',
 									},
 									{ id: 203, expression: 'expression4' },
+								],
+							},
+						},
+					],
+				},
+			},
+			include: {
+				expressions: { select: { id: true } },
+			},
+		},
+		// 	ФРАЗЫ
+		{
+			data: {
+				name: 'Блатные фразы',
+				exerciseType: { connect: { id: EXERCISES_TYPE.PHRASES } },
+				imgSrc: '/assets/img/book.svg',
+				expressions: {
+					create: [
+						{
+							expression: 'expression1',
+							example: 'example',
+							translatedExample: 'translatedExample',
+							description: 'description',
+
+							// required relation via `answer` field
+							correctAnswerId: 1000,
+
+							// m2m options
+							answerOptions: {
+								create: [
+									{ id: 1000, expression: 'expression1' },
+									{ id: 1001, expression: 'expression2' },
+									{
+										id: 1002,
+										expression: 'expression3',
+									},
+									{ id: 1003, expression: 'expression4' },
+								],
+							},
+						},
+						{
+							expression: 'expression1',
+							example: 'example',
+							translatedExample: 'translatedExample',
+							description: 'description',
+
+							// required relation via `answer` field
+							correctAnswerId: 1100,
+
+							// m2m options
+							answerOptions: {
+								create: [
+									{ id: 1100, expression: 'expression1' },
+									{ id: 1101, expression: 'expression2' },
+									{
+										id: 1102,
+										expression: 'expression3',
+									},
+									{ id: 1103, expression: 'expression4' },
+								],
+							},
+						},
+						{
+							expression: 'expression1',
+							example: 'example',
+							translatedExample: 'translatedExample',
+							description: 'description',
+
+							// required relation via `answer` field
+							correctAnswerId: 1200,
+
+							// m2m options
+							answerOptions: {
+								create: [
+									{ id: 1200, expression: 'expression1' },
+									{ id: 1201, expression: 'expression2' },
+									{
+										id: 1202,
+										expression: 'expression3',
+									},
+									{ id: 1203, expression: 'expression4' },
+								],
+							},
+						},
+						{
+							expression: 'expression1',
+							example: 'example',
+							translatedExample: 'translatedExample',
+							description: 'description',
+
+							// required relation via `answer` field
+							correctAnswerId: 1300,
+
+							// m2m options
+							answerOptions: {
+								create: [
+									{ id: 1300, expression: 'expression1' },
+									{ id: 1301, expression: 'expression2' },
+									{
+										id: 1302,
+										expression: 'expression3',
+									},
+									{ id: 1303, expression: 'expression4' },
+								],
+							},
+						},
+						{
+							expression: 'expression1',
+							example: 'example',
+							translatedExample: 'translatedExample',
+							description: 'description',
+
+							// required relation via `answer` field
+							correctAnswerId: 1400,
+
+							// m2m options
+							answerOptions: {
+								create: [
+									{ id: 1400, expression: 'expression1' },
+									{ id: 1401, expression: 'expression2' },
+									{
+										id: 1402,
+										expression: 'expression3',
+									},
+									{ id: 1403, expression: 'expression4' },
 								],
 							},
 						},

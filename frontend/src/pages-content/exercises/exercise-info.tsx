@@ -3,6 +3,7 @@ import cn from 'classnames';
 import { ExerciseCard } from '@/pages-content/exercises/exercise-card';
 import { IExercisesMainProps } from '@/pages-content/exercises/exercises-main';
 import { IExercise } from '@/pages-content/exercises/types/exercises';
+import { EXERCISE_TYPE } from '@/const';
 
 interface IExerciseInfoProps extends IExercisesMainProps {
 	onExerciseCardClick: (exercise: IExercise) => void;
@@ -19,10 +20,14 @@ function getProgress(exercises: IExercise[]) {
 		{ total: 0, passed: 0 }
 	);
 
-	return total ? passed / total : 0;
+	return total ? (passed / total) * 100 : 0;
 }
 
-export function ExerciseInfo({ exercises, onExerciseCardClick }: IExerciseInfoProps) {
+export function ExerciseInfo({
+	exercises,
+	onExerciseCardClick,
+	type,
+}: IExerciseInfoProps) {
 	const progress = getProgress(exercises);
 
 	return (
@@ -31,15 +36,23 @@ export function ExerciseInfo({ exercises, onExerciseCardClick }: IExerciseInfoPr
 				<ProgressLine percent={progress} />
 			</div>
 			<div className="mt-6 flex flex-col items-center">
-				<div className="text-4xl">Выберите категорию терминов</div>
+				<div className="text-4xl">
+					Выберите категорию {type === EXERCISE_TYPE.TERMS ? 'терминов' : 'фраз'}
+				</div>
 				<div
-					className={cn('mt-8', 'grid', 'grid-cols-3 auto-rows-fr', 'w-full', 'gap-6')}
+					className={cn(
+						'mt-8',
+						'flex justify-center',
+						'w-full',
+						'gap-6'
+					)}
 				>
 					{exercises.map((exercise) => (
 						<ExerciseCard
 							key={exercise.id}
 							exercise={exercise}
 							onClick={onExerciseCardClick}
+							type={type}
 						/>
 					))}
 				</div>

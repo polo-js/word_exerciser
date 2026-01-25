@@ -10,9 +10,9 @@ export interface IExercise {
 
 export interface IExerciseExpressions {
 	id: number;
-	answerOptions: IAnswerOptions[];
-	answer: IAnswerOptions;
 	expression: string;
+	answerOptions: IAnswerOptions[];
+	correctAnswerId: number;
 	example: string;
 	translatedExample: string;
 	description: string;

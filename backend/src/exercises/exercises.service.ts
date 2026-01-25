@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { ExerciseResultDto } from './schema/exercise-result.dto';
+import { ExerciseExpressionsDto, ExerciseResultDto } from './schema/exercise-result.dto';
 import { handleError, plainObjectToDTO } from '../shared/utils';
 
 @Injectable()
@@ -45,9 +45,9 @@ export class ExercisesService {
 		return plainObjectToDTO(ExerciseResultDto, {
 			exercises: exercises.map((exercise) => {
 				const totalExpressions = exercise.expressions.length;
-				let passedExpressions = exercise.expressions
-					.map((expression) => !!expression.progress.length)
-					.filter(Boolean).length;
+				let passedExpressions = exercise.expressions.filter(
+					(expression) => !!expression.progress.length
+				).length;
 
 				if (passedExpressions > totalExpressions) {
 					handleError(`Progress cannot be more than expressions count ${exercise.id}`);
@@ -56,6 +56,9 @@ export class ExercisesService {
 
 				return {
 					...exercise,
+					expressions: exercise.expressions.filter(
+						(expression) => !expression.progress.length
+					),
 					total: totalExpressions,
 					passed: passedExpressions,
 				};

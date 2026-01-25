@@ -22,6 +22,7 @@ import {
 import { ALL_EXERCISES_TYPES, ONLY_EXERCISES_TYPES } from './types/exercises-types';
 import { isDevelopment } from '../const';
 import { plainObjectToDTO } from '../shared/utils';
+import { EXERCISES_TYPE } from '../exercises/const';
 
 type IProgressByType = Record<ALL_EXERCISES_TYPES, { total: number; passed: number }>;
 
@@ -84,6 +85,82 @@ export class ProgressService {
 			finalTestThresholdPercent: FINAL_TEST_THRESHOLD_PERCENT,
 			finalTestIsAvailable: totalProgress >= FINAL_TEST_THRESHOLD_PERCENT,
 			progressList,
+		});
+	}
+
+	async setExerciseExpressionProgress({
+		id,
+		userLogin,
+	}: {
+		id: number;
+		userLogin: string;
+	}) {
+		const expression = await this.prismaService.exercisesExpression.findUnique({
+			where: { id },
+		});
+
+		if (!expression) {
+			throw new NotFoundException('Expression not found');
+		}
+
+		const user = await this.prismaService.user.findUnique({
+			where: {
+				login: userLogin,
+			},
+		});
+
+		if (!user) {
+			throw new NotFoundException('User not exist');
+		}
+
+		return this.prismaService.exerciseExpressionProgress.upsert({
+			where: {
+				user_exerciseExpression: {
+					user: user.id,
+					exerciseExpression: id,
+				},
+			},
+			update: {}, // ничего не обновляем
+			create: {
+				user: user.id,
+				exerciseExpression: id,
+			},
+		});
+	}
+
+	async deleteExerciseExpressionProgress({
+		id,
+		userLogin,
+	}: {
+		id: number;
+		userLogin: string;
+	}) {
+		const exerciseExpressionProgress =
+			await this.prismaService.exerciseExpressionProgress.findUnique({
+				where: { id },
+			});
+
+		if (!exerciseExpressionProgress) {
+			throw new NotFoundException('Exercise expression not exist');
+		}
+
+		const user = await this.prismaService.user.findUnique({
+			where: {
+				login: userLogin,
+			},
+		});
+
+		if (!user) {
+			throw new NotFoundException('User not exist');
+		}
+
+		return this.prismaService.exerciseExpressionProgress.delete({
+			where: {
+				user_exerciseExpression: {
+					exerciseExpression: id,
+					user: user.id,
+				},
+			},
 		});
 	}
 
@@ -212,7 +289,7 @@ export class ProgressService {
 			const progressCoefficient = MAX_EXERCISES_ENTITY_PERCENT[key];
 			const passedProgressPercent = total ? passed / total : 0;
 
-			return acc + passedProgressPercent * progressCoefficient;
+			return acc + Math.round(passedProgressPercent * progressCoefficient);
 		}, 0);
 
 		if (progressSum > 100) {
