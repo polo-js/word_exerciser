@@ -135,12 +135,11 @@ export class ProgressService {
 		id: number;
 		userLogin: string;
 	}) {
-		const exerciseExpressionProgress =
-			await this.prismaService.exerciseExpressionProgress.findUnique({
-				where: { id },
-			});
+		const exerciseExpression = await this.prismaService.exercisesExpression.findUnique({
+			where: { id },
+		});
 
-		if (!exerciseExpressionProgress) {
+		if (!exerciseExpression) {
 			throw new NotFoundException('Exercise expression not exist');
 		}
 
