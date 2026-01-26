@@ -26,7 +26,13 @@ export function ExerciseProgress({ progress }: IExerciseProgressProps) {
 			>
 				<div className="flex gap-3">
 					<div>
-						<Image src={progress.imgSrc} alt={'IMG'} width={50} height={50} />
+						<Image
+							src={progress.imgSrc}
+							alt={'IMG'}
+							width={50}
+							height={50}
+							className="w-[50px] h-[50px]"
+						/>
 					</div>
 					<div className="flex flex-col gap-1">
 						<div className="text-3xl">{progress.title}</div>

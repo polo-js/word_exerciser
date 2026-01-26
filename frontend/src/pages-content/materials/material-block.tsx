@@ -37,6 +37,7 @@ export function MaterialBlock({ material, onValueChange }: IMaterialBlockProps) 
 						width={140}
 						height={100}
 						alt="IMG: Справочный материал"
+						className="w-[140px] h-[100px]"
 					/>
 				</div>
 				<div>

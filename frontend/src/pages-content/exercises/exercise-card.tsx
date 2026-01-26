@@ -36,7 +36,13 @@ export function ExerciseCard({ exercise, onClick, type }: IExerciseBlockProps) {
 			)}
 			onClick={isAvailable ? onClickHandler : void 0}
 		>
-			<Image src={exercise.imgSrc} alt="IMG: Exercise" width={150} height={120} />
+			<Image
+				className="w-[150px] h-150px"
+				src={exercise.imgSrc}
+				alt="IMG: Exercise"
+				width={150}
+				height={150}
+			/>
 			<div className="text-5xl text-center">{exercise.name}</div>
 			<div
 				className={cn(

@@ -176,6 +176,7 @@ export function ExpressionsCard({
 								alt="IMG: Success"
 								width={42}
 								height={42}
+								className="w-[42px] h-[42px]"
 							/>
 							<div className="text-xl">
 								{isChosenCorrectAnswer ? 'Правильно!' : 'Неправильно!'}
