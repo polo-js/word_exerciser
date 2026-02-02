@@ -43,7 +43,7 @@ export function ExerciseCard({ exercise, onClick, type }: IExerciseBlockProps) {
 				width={150}
 				height={150}
 			/>
-			<div className="text-5xl text-center">{exercise.name}</div>
+			<div className="text-4xl text-center">{exercise.name}</div>
 			<div
 				className={cn(
 					'text-gray-600 text-xl mt-5 mb-5',

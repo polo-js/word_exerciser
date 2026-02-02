@@ -10,8 +10,8 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-	title: 'Govno',
-	description: 'Zalupa',
+	title: 'Procurement English',
+	description: 'Procurement English',
 };
 
 export default function RootLayout({

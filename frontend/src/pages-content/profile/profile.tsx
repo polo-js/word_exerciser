@@ -43,7 +43,7 @@ export function Profile({ progress }: IProfileProps) {
 			{/* Итоговый прогресс */}
 			<div className="bg-white shadow-card rounded-lg">
 				<div className="p-5">
-					<div className="text-xl mb-1">Общий прогресс</div>
+					<div className="text-xl mb-1">Прогресс обучения</div>
 					<div className="flex gap-2 items-center mt-2">
 						<Progress.Root
 							className={cn(
@@ -68,7 +68,7 @@ export function Profile({ progress }: IProfileProps) {
 						<div className="pl-5 pr-2 text-2xl">{totalProgress}%</div>
 					</div>
 					<div className="flex items-center gap-3 mt-3">
-						<div>Итоговый тест будет доступен при достижении 80% прогресса:</div>
+						<div>Дойдите до 80%, чтобы открыть финальный тест:</div>
 						<div className="flex items-center gap-2">
 							<FaCircle color={finalTestIsAvailable ? 'green' : 'red'} size={15} />
 							{finalTestIsAvailable ? 'Доступен' : 'Не доступен'}
@@ -93,7 +93,7 @@ type ICalculatedProgressProps = 'hrefToMaterials' | 'progressText';
 const FINAL_TEST_CONFIG: Omit<IProgress, ICalculatedProgressProps> = {
 	id: 4,
 	title: 'Итоговый тест',
-	description: 'Надо было готовиться',
+	description: 'Проверьте знания по пройденным материалам',
 	imgSrc: '/assets/img/shield-warning.svg',
 };
 

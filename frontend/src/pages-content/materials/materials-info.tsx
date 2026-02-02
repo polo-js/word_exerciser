@@ -49,8 +49,9 @@ export function MaterialsInfo({ materialsInfo }: IMaterialsInfoProps) {
 			<div className="mt-6 flex flex-col items-center">
 				<div className="text-4xl">Справочные материалы</div>
 				<div className="text-center text-lg mt-2 text-gray-600">
-					Изучите контекстное применение терминологии закупок. Для <b>продвижения</b> в
-					изучении материала необходимо просмотреть его и отметить как пройденный
+					Короткие объяснения по ключевым темам закупок. 
+					<br />
+					Откройте материал и отметьте его как просмотренный, чтобы зачесть прогресс.
 				</div>
 				<div
 					className={cn('mt-8', 'grid', 'grid-cols-2 auto-rows-fr', 'w-full', 'gap-6')}

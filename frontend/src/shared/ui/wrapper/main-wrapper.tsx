@@ -62,7 +62,7 @@ export function MainWrapper({
 					>
 						<div className={cn('flex', 'flex-col', 'items-start', 'justify-center')}>
 							<div className="uppercase font-bold text-xl">
-								Закупки на английском языке
+								Платформа: Английский для закупок
 							</div>
 							<div className="text-lg">
 								Профессиональная платформа для изучения лексики

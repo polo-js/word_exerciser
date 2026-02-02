@@ -81,7 +81,7 @@ export function MaterialBlock({ material, onValueChange }: IMaterialBlockProps) 
 						</Checkbox.Indicator>
 					</div>
 					<Label.Root className="cursor-pointer" htmlFor={String(material.id)}>
-						Просмотрено
+						Изучено
 					</Label.Root>
 				</Checkbox.Root>
 			</div>

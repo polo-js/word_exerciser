@@ -195,7 +195,7 @@ export function ExpressionsCard({
 					</div>
 				</div>
 
-				<div className="flex justify-end items-center">
+				<div className="flex justify-end items-center mt-3">
 					<button
 						onClick={onNextCardClickHandler}
 						className={cn(
