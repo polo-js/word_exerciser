@@ -21,7 +21,6 @@ export function MaterialsInfo({ materialsInfo }: IMaterialsInfoProps) {
 	const [materialInfoState, setMaterialInfoState] =
 		useState<IMaterialDto[]>(materialsInfo);
 	const progress = getProgress(materialInfoState);
-	console.log(progress);
 
 	const materialInfoCheckHandler = (id: number, checked: boolean) => {
 		if (checked) {

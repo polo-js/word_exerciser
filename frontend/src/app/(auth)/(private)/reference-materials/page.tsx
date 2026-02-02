@@ -11,6 +11,7 @@ export default async function Page() {
 		},
 	});
 
+
 	if (!materialsInfo.success) {
 		throw new Error();
 	}
