@@ -1,7 +1,6 @@
 'use client';
 import cn from 'classnames';
 import { Progress } from 'radix-ui';
-import { FaCircle } from 'react-icons/fa';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { namePretty } from '@/shared/utils/print';
 import { ExerciseProgress } from './exercise.progress';
@@ -39,16 +38,27 @@ export function Profile({ progress }: IProfileProps) {
 
 	return (
 		<div className="flex flex-col w-full">
-			<div className="text-2xl mb-6">Добро пожаловать, {nickname}</div>
+			<div className="text-3xl font-semibold tracking-tight text-gray-900 mb-6">
+				Добро пожаловать, {nickname}
+			</div>
+
 			{/* Итоговый прогресс */}
-			<div className="bg-white shadow-card rounded-lg">
-				<div className="p-5">
-					<div className="text-xl mb-1">Прогресс обучения</div>
-					<div className="flex gap-2 items-center mt-2">
+			<div className="bg-white rounded-2xl ring-1 ring-black/5 shadow-sm">
+				<div className="p-6">
+					{/* Заголовок */}
+					<div>
+						<div className="text-lg font-medium text-gray-900">Прогресс обучения</div>
+						<div className="text-sm text-gray-500 mt-1">
+							Дойдите до {finalTestThresholdPercent}%, чтобы открыть финальный тест
+						</div>
+					</div>
+
+					{/* Прогресс-бар */}
+					<div className="mt-5 flex items-center gap-4">
 						<Progress.Root
 							className={cn(
-								'relative overflow-hidden bg-zinc-100 rounded-xs',
-								'w-full h-[25px]',
+								'relative overflow-hidden bg-zinc-100 rounded-full',
+								'w-full h-[12px]',
 								'translate-z-0'
 							)}
 							value={totalProgress}
@@ -56,28 +66,37 @@ export function Profile({ progress }: IProfileProps) {
 							<Progress.Indicator
 								className={cn(
 									'bg-[linear-gradient(to_right,#202326,#93A0B0)]',
-									'w-full',
-									'h-full',
-									'transition-transform',
-									'duration-600',
+									'w-full h-full',
+									'transition-transform duration-700',
 									'ease-[cubic-bezier(0.65, 0, 0.35, 1)]'
 								)}
 								style={{ transform: `translateX(-${100 - currentProgress}%)` }}
 							/>
 						</Progress.Root>
-						<div className="pl-5 pr-2 text-2xl">{totalProgress}%</div>
-					</div>
-					<div className="flex items-center gap-3 mt-3">
-						<div>Дойдите до 80%, чтобы открыть финальный тест:</div>
-						<div className="flex items-center gap-2">
-							<FaCircle color={finalTestIsAvailable ? 'green' : 'red'} size={15} />
-							{finalTestIsAvailable ? 'Доступен' : 'Не доступен'}
+
+						<div className="min-w-[56px] text-right text-2xl font-semibold text-gray-900">
+							{totalProgress}%
 						</div>
+					</div>
+
+					{/* Статус финального теста (оставляем один раз) */}
+					<div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-gray-600">
+						<span>Статус финального теста:</span>
+						<span className="inline-flex items-center gap-2">
+							<span
+								className={cn(
+									'h-2 w-2 rounded-full',
+									finalTestIsAvailable ? 'bg-emerald-500' : 'bg-rose-500'
+								)}
+							/>
+							{finalTestIsAvailable ? 'Доступен' : 'Недоступен'}
+						</span>
 					</div>
 				</div>
 			</div>
+
 			{/* Прогресс */}
-			<div className="mt-4">
+			<div className="mt-5">
 				<div className="flex flex-col gap-4">
 					{progressList.map((progressData) => {
 						return <ExerciseProgress progress={progressData} key={progressData.id} />;
@@ -120,3 +139,4 @@ function FinalTest({
 
 	return <ExerciseProgress progress={progressConfig} />;
 }
+
