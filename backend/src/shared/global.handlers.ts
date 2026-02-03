@@ -8,6 +8,7 @@ import {
 	HttpException,
 	Injectable,
 	NestInterceptor,
+	StreamableFile,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { catchError, map, Observable, throwError } from 'rxjs';
@@ -20,6 +21,8 @@ export class TransformResultInterceptor implements NestInterceptor {
 
 		return next.handle().pipe(
 			map((result) => {
+				if (result instanceof StreamableFile) return result;
+
 				return { success: true, result };
 			}),
 			catchError((error) => {

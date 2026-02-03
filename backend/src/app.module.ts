@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ProgressModule } from './progress/progress.module';
 import { MaterialsModule } from './materials/materials.module';
 import { ExercisesModule } from './exercises/exercises.module';
+import { ExcelModule } from './excel/excel.module';
 
 @Module({
 	imports: [
@@ -19,6 +20,7 @@ import { ExercisesModule } from './exercises/exercises.module';
 			isGlobal: true,
 		}),
 		ExercisesModule,
+		ExcelModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

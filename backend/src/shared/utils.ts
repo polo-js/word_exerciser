@@ -22,3 +22,13 @@ export function handleError(str: string, Exception?: HttpExceptionCtor): never |
 		console.error(str);
 	}
 }
+
+export function shuffle<T>(arr: T[]): T[] {
+	for (let i = arr.length - 1; i > 0; i--) {
+		// случайный индекс от 0 до i включительно
+		const j = Math.floor(Math.random() * (i + 1));
+		// swap
+		[arr[i], arr[j]] = [arr[j], arr[i]];
+	}
+	return arr;
+}

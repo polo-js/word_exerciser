@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { ExerciseExpressionsDto, ExerciseResultDto } from './schema/exercise-result.dto';
-import { handleError, plainObjectToDTO } from '../shared/utils';
+import { ExerciseResultDto } from './schema/exercise-result.dto';
+import { handleError, plainObjectToDTO, shuffle } from '../shared/utils';
 
 @Injectable()
 export class ExercisesService {
@@ -10,9 +10,11 @@ export class ExercisesService {
 	async getExercises({
 		type,
 		userLogin,
+		max,
 	}: {
 		type: number;
 		userLogin: string;
+		max?: number;
 	}): Promise<ExerciseResultDto> {
 		const user = await this.prismaService.user.findUnique({
 			where: {
@@ -54,11 +56,13 @@ export class ExercisesService {
 					passedExpressions = totalExpressions;
 				}
 
+				const expressions = shuffle(
+					exercise.expressions.filter((expression) => !expression.progress.length)
+				).map((item, index) => ({ ...item, index: index + 1 }));
+
 				return {
 					...exercise,
-					expressions: exercise.expressions.filter(
-						(expression) => !expression.progress.length
-					),
+					expressions: expressions.slice(0, max || expressions.length),
 					total: totalExpressions,
 					passed: passedExpressions,
 				};

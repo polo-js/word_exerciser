@@ -85,14 +85,28 @@ async function main() {
 	// =========================
 
 	// --- User ---
-	const user = await prisma.user.create({
-		data: {
+	const user = await prisma.user.createMany({
+		data: [{
 			name: 'Антон',
 			lastname: 'Васильев',
 			passwordHash:
 				'$argon2id$v=19$m=65536,t=3,p=4$80/6x+ObSjRnhqvgwuA9og$nHEDE9A4oqnhbXiuQuVWOXsvb9pz+ueEBKXbVv/4c90',
 			login: 'AVasilev',
 		},
+			{
+				name: 'Антон2',
+				lastname: 'Васильев2',
+				passwordHash:
+					'$argon2id$v=19$m=65536,t=3,p=4$80/6x+ObSjRnhqvgwuA9og$nHEDE9A4oqnhbXiuQuVWOXsvb9pz+ueEBKXbVv/4c90',
+				login: 'kefir1',
+			},
+			{
+				name: 'Антон3',
+				lastname: 'Васильев3',
+				passwordHash:
+					'$argon2id$v=19$m=65536,t=3,p=4$80/6x+ObSjRnhqvgwuA9og$nHEDE9A4oqnhbXiuQuVWOXsvb9pz+ueEBKXbVv/4c90',
+				login: 'kefir2',
+			},],
 	});
 
 	// --- ExercisesTypes ---
@@ -107,6 +121,12 @@ async function main() {
 			{
 				id: EXERCISES_TYPE.PHRASES,
 				name: 'Фразы',
+				description: 'description',
+				icon: 'icon',
+			},
+			{
+				id: EXERCISES_TYPE.FINAL_TEST,
+				name: 'Финальный тест',
 				description: 'description',
 				icon: 'icon',
 			},
@@ -1789,6 +1809,106 @@ async function main() {
 				expressions: { select: { id: true } },
 			},
 		},
+		{
+			data: {
+				name: 'Финальный тест',
+				exerciseType: { connect: { id: EXERCISES_TYPE.FINAL_TEST } },
+				imgSrc: '',
+				expressions: {
+					create: [
+						{
+							expression: 'What does the phrase "break the ice" mean?',
+							example: 'He told a joke to break the ice.',
+							translatedExample: 'Он пошутил, чтобы разрядить обстановку.',
+							description: 'Common English idiom',
+
+							correctAnswerId: 2000,
+
+							answerOptions: {
+								create: [
+									{ id: 2000, expression: 'To start a conversation in a relaxed way' },
+									{ id: 2001, expression: 'To end a discussion' },
+									{ id: 2002, expression: 'To solve a difficult problem' },
+									{ id: 2003, expression: 'To avoid communication' },
+								],
+							},
+						},
+						{
+							expression: 'Choose the correct meaning of "once in a blue moon"',
+							example: 'I see him once in a blue moon.',
+							translatedExample: 'Я вижу его очень редко.',
+							description: 'Frequency expression',
+
+							correctAnswerId: 2100,
+
+							answerOptions: {
+								create: [
+									{ id: 2100, expression: 'Very rarely' },
+									{ id: 2101, expression: 'Every day' },
+									{ id: 2102, expression: 'At night' },
+									{ id: 2103, expression: 'In a bad mood' },
+								],
+							},
+						},
+						{
+							expression: 'What does "cost an arm and a leg" imply?',
+							example: 'That car costs an arm and a leg.',
+							translatedExample: 'Эта машина стоит бешеных денег.',
+							description: 'Idiomatic expression',
+
+							correctAnswerId: 2200,
+
+							answerOptions: {
+								create: [
+									{ id: 2200, expression: 'Something very expensive' },
+									{ id: 2201, expression: 'Something dangerous' },
+									{ id: 2202, expression: 'Something unnecessary' },
+									{ id: 2203, expression: 'Something broken' },
+								],
+							},
+						},
+						{
+							expression: 'Select the meaning of "hit the nail on the head"',
+							example: 'You hit the nail on the head with that comment.',
+							translatedExample: 'Ты попал прямо в точку.',
+							description: 'Accuracy-related phrase',
+
+							correctAnswerId: 2300,
+
+							answerOptions: {
+								create: [
+									{ id: 2300, expression: 'To be exactly right' },
+									{ id: 2301, expression: 'To make a mistake' },
+									{ id: 2302, expression: 'To avoid responsibility' },
+									{ id: 2303, expression: 'To repeat the same thing' },
+								],
+							},
+						},
+						{
+							expression: 'What does "under the weather" usually mean?',
+							example: 'I am feeling under the weather today.',
+							translatedExample: 'Сегодня я плохо себя чувствую.',
+							description: 'Health-related idiom',
+
+							correctAnswerId: 2400,
+
+							answerOptions: {
+								create: [
+									{ id: 2400, expression: 'Feeling ill or unwell' },
+									{ id: 2401, expression: 'Feeling angry' },
+									{ id: 2402, expression: 'Feeling excited' },
+									{ id: 2403, expression: 'Feeling bored' },
+								],
+							},
+						},
+					],
+				},
+			},
+			include: {
+				expressions: { select: { id: true } },
+			},
+		}
+
 	];
 
 	const exercises = await prisma.$transaction(
@@ -1850,7 +1970,7 @@ async function main() {
 	// =========================
 	// 4) Финальный статус (как в примере)
 	// =========================
-	console.log('✅ Seed завершён. Создан пользователь:', user.login);
+	console.log('✅ Seed завершён. Создан пользователь:', user.count);
 	console.log('✅ Seed завершён. Создан тип упражнения:', exerciseType.count);
 	console.log('✅ Seed завершён. Создано упражнение:', exercises.length);
 	console.log('✅ Seed завершён. Создан материал:', referenceMaterial.count);

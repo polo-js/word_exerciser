@@ -2,7 +2,6 @@ import { JSX } from 'react';
 
 export interface IProfileProgress {
 	totalProgress: number;
-	finalTestThresholdPercent: number;
 	finalTestIsAvailable: boolean;
 	progressList: IProgress[];
 }
