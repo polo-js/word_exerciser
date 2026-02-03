@@ -1,6 +1,6 @@
 import { IExerciseExpressions } from '@/pages-content/exercises/types/exercises';
 import { IoIosArrowBack } from 'react-icons/io';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import cn from 'classnames';
 import Image from 'next/image';
 import { WordCard } from '@/shared/ui/word-card';
@@ -39,9 +39,7 @@ export function ExpressionsCard({
 	const isChosenAnswer = chosenExpressionId !== null;
 
 	// ✅ Для “Правильный ответ: …” (показываем только если пользователь ошибся)
-	const correctOption = useMemo(() => {
-		return answerOptions.find((o) => o.id === correctAnswerId);
-	}, [answerOptions, correctAnswerId]);
+	const correctOption = answerOptions.find((o) => o.id === correctAnswerId)
 
 	const onExpressionClickHandler = (id: number) => {
 		if (chosenExpressionId !== null) {

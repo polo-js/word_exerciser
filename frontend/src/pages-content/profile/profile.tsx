@@ -49,7 +49,7 @@ export function Profile({ progress }: IProfileProps) {
 					<div>
 						<div className="text-lg font-medium text-gray-900">Прогресс обучения</div>
 						<div className="text-sm text-gray-500 mt-1">
-							Дойдите до {finalTestThresholdPercent}%, чтобы открыть финальный тест
+							Дойдите до {finalTestThresholdPercent}%, чтобы открыть итоговый тест
 						</div>
 					</div>
 
@@ -81,7 +81,7 @@ export function Profile({ progress }: IProfileProps) {
 
 					{/* Статус финального теста (оставляем один раз) */}
 					<div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-gray-600">
-						<span>Статус финального теста:</span>
+						<span>Статус итогового теста:</span>
 						<span className="inline-flex items-center gap-2">
 							<span
 								className={cn(

@@ -1,7 +1,7 @@
 import { ALL_EXERCISES_TYPES } from './types/exercises-types';
 import { ProgressDto } from './schema/progress.dto';
 
-export const FINAL_TEST_THRESHOLD_PERCENT = 80;
+export const FINAL_TEST_THRESHOLD_PERCENT = 90;
 
 export const EXERCISES_TERMS_TYPE = 1;
 export const EXERCISES_PHRASES_TYPE = 2;
