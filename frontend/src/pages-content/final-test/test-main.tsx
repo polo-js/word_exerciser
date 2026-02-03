@@ -1,8 +1,8 @@
 import * as React from 'react';
-import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { IQuestionBlock, ITestExpression } from './types/questions';
 import { QuestionBlock } from './question-block';
 import { memo, useEffect } from 'react';
+import { toast } from 'sonner';
 
 type Props = {
 	expressions: IQuestionBlock[];
@@ -47,7 +47,6 @@ function TestMainComp({ expressions = MOCK_EXERCISES, onSubmit }: Props) {
 	>(() => {
 		return Object.fromEntries(expressions.map((item) => [item.id, null]));
 	});
-	const [showErrorOnSubmit, setShowErrorOnSubmit] = React.useState<boolean>(false);
 
 	const answeredCount = Object.values(selectedByQuestionId).filter(
 		(answerId) => answerId != null
@@ -59,7 +58,7 @@ function TestMainComp({ expressions = MOCK_EXERCISES, onSubmit }: Props) {
 			Object.values(selectedByQuestionId).filter((v) => v !== null).length;
 
 		if (!isAllAnswered) {
-			setShowErrorOnSubmit(true);
+			toast.error('Необходимо ответить на все вопросы');
 			return;
 		}
 
@@ -113,34 +112,23 @@ function TestMainComp({ expressions = MOCK_EXERCISES, onSubmit }: Props) {
 
 			{/* Middle (scrollable) */}
 			<div className="rounded-2xl">
-				<ScrollArea.Root className="h-[550px] w-full overflow-hidden">
-					<ScrollArea.Viewport className="h-full w-full p-5">
-						<div className="space-y-4">
-							{expressions.map((q) => (
-								<QuestionBlock
-									key={q.id}
-									exercise={q}
-									index={q.index}
-									value={selectedByQuestionId[q.id] ?? null}
-									onChange={(answerId) =>
-										setSelectedByQuestionId((prev) => ({ ...prev, [q.id]: answerId }))
-									}
-								/>
-							))}
-						</div>
-					</ScrollArea.Viewport>
-
-					<ScrollArea.Scrollbar
-						orientation="vertical"
-						className="flex w-2.5 touch-none select-none p-0.5"
-					>
-						<ScrollArea.Thumb className="relative flex-1 rounded-full bg-slate-300" />
-					</ScrollArea.Scrollbar>
-				</ScrollArea.Root>
+				<div className="space-y-4">
+					{expressions.map((q) => (
+						<QuestionBlock
+							key={q.id}
+							exercise={q}
+							index={q.index}
+							value={selectedByQuestionId[q.id] ?? null}
+							onChange={(answerId) =>
+								setSelectedByQuestionId((prev) => ({ ...prev, [q.id]: answerId }))
+							}
+						/>
+					))}
+				</div>
 			</div>
 
 			{/* Bottom */}
-			<div className="mt-5 flex flex-col justify-center items-center">
+			<div className="mt-9 flex flex-col justify-center items-center">
 				<button
 					type="button"
 					onClick={handleSubmit}
@@ -148,9 +136,6 @@ function TestMainComp({ expressions = MOCK_EXERCISES, onSubmit }: Props) {
 				>
 					Submit test
 				</button>
-				<span className="text-red-600 text-sm mt-4 min-h-[20px]">
-					{showErrorOnSubmit && 'Complete all questions'}
-				</span>
 			</div>
 		</div>
 	);

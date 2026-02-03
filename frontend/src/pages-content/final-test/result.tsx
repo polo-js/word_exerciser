@@ -156,7 +156,7 @@ export function TestResultContent({ testResult, onRetake }: TestResultContentPro
 			</Card>
 
 			{/* Список */}
-			{!passed && (
+			{!!visibleList.length && (
 				<Card>
 					<div className="px-7 py-6">
 						<h3 className="text-xl font-semibold text-slate-900">Ошибки</h3>
