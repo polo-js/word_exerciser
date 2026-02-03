@@ -20,7 +20,7 @@ export class AuthService {
 
 		const accessToken = await this.jwtService.signAsync(
 			{ sub: user.id, login: user.login },
-			{ expiresIn: '10000m' }
+			{ expiresIn: '5Y' }
 		);
 
 		return { accessToken, user: this.usersService.getPlainUser(user) };

@@ -43,7 +43,7 @@ export class AuthController {
 			secure: !isDevelopment,
 			sameSite: 'lax',
 			path: '/',
-			maxAge: 15 * 60 * 1000, // 15 минут
+			maxAge: 1000 * 60 * 60 * 60 * 24 * 365 * 5, // 15 минут
 		});
 
 		return user;
