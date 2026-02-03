@@ -31,7 +31,7 @@ export class RefreshTokenGuard implements CanActivate {
 
 		const newToken = await this.jwt.signAsync(
 			{ sub: user.sub, login: user.login },
-			{ expiresIn: '10000m' }
+			{ expiresIn: '5Y' }
 		);
 
 		res.cookie('access_token', newToken, {
@@ -39,7 +39,7 @@ export class RefreshTokenGuard implements CanActivate {
 			sameSite: 'lax',
 			secure: !isDevelopment, // в dev можешь false
 			path: '/',
-			maxAge: 1000 * 60 * 1000,
+			maxAge: 1000 * 60 * 60 * 60 * 24 * 365 * 5,
 		});
 
 		return true;
