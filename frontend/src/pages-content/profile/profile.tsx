@@ -151,7 +151,7 @@ function FinalTest({
 	finalTestIsAvailable,
 }: Pick<IProfileProgress, 'finalTestIsAvailable'>) {
 	const progressConfig = useMemo<IProgress>(() => {
-		const config = !finalTestIsAvailable
+		const config = finalTestIsAvailable
 			? {
 					hrefToMaterials: '/final-test',
 					progressText: <span>Доступно</span>,
