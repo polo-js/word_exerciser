@@ -18,6 +18,7 @@ class UserService extends BaseStore<object> {
 			method: 'POST',
 			body: JSON.stringify(new UserLoginDto(userForm).toServer()),
 			credentials: 'include',
+			disableRedirectToLogin: true,
 		});
 
 		if (result.success) {

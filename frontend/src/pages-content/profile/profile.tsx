@@ -8,17 +8,19 @@ import { IProfileProgress, IProgress } from '@/pages-content/profile/types/progr
 import { RiLock2Line } from 'react-icons/ri';
 import { redirect } from 'next/navigation';
 import { AuthContext } from '@/app/(auth)/_components/auth.controller';
+import { API_URL, FINAL_TEST_THRESHOLD_PERCENT } from '@/const';
 
 interface IProfileProps {
 	progress: IProfileProgress;
 }
 
+const ADMIN_USER_LOGIN = 'AVasilev';
+
 export function Profile({ progress }: IProfileProps) {
 	const [currentProgress, setCurrentProgress] = useState<number>(0);
 	const { user } = useContext(AuthContext);
 
-	const { finalTestIsAvailable, totalProgress, finalTestThresholdPercent, progressList } =
-		progress;
+	const { finalTestIsAvailable, totalProgress, progressList } = progress;
 
 	useEffect(() => {
 		const timer = setTimeout(() => {
@@ -36,10 +38,39 @@ export function Profile({ progress }: IProfileProps) {
 
 	const nickname = namePretty(user);
 
+	const onDownloadHandler = async () => {
+		const resp = await fetch(`${API_URL}/excel/users-progress`, {
+			method: 'GET',
+			credentials: 'include',
+		});
+
+		if (!resp.ok) throw new Error('Download failed');
+
+		const blob = await resp.blob();
+		const url = window.URL.createObjectURL(blob);
+
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = 'users-progress.xlsx';
+		document.body.appendChild(a);
+		a.click();
+		a.remove();
+
+		window.URL.revokeObjectURL(url);
+	};
+
 	return (
 		<div className="flex flex-col w-full">
-			<div className="text-3xl font-semibold tracking-tight text-gray-900 mb-6">
+			<div className="text-3xl font-semibold tracking-tight text-gray-900 mb-6 flex justify-between">
 				Добро пожаловать, {nickname}
+				{user.login === ADMIN_USER_LOGIN && (
+					<button
+						className="rounded-lg bg-emerald-600 px-2 py-1 text-xl font-medium text-white shadow-md shadow-emerald-600/20 transition hover:bg-emerald-700 cursor-pointer"
+						onClick={onDownloadHandler}
+					>
+						Скачать
+					</button>
+				)}
 			</div>
 
 			{/* Итоговый прогресс */}
@@ -49,7 +80,7 @@ export function Profile({ progress }: IProfileProps) {
 					<div>
 						<div className="text-lg font-medium text-gray-900">Прогресс обучения</div>
 						<div className="text-sm text-gray-500 mt-1">
-							Дойдите до {finalTestThresholdPercent}%, чтобы открыть итоговый тест
+							Дойдите до {FINAL_TEST_THRESHOLD_PERCENT}%, чтобы открыть итоговый тест
 						</div>
 					</div>
 
@@ -120,7 +151,7 @@ function FinalTest({
 	finalTestIsAvailable,
 }: Pick<IProfileProgress, 'finalTestIsAvailable'>) {
 	const progressConfig = useMemo<IProgress>(() => {
-		const config = finalTestIsAvailable
+		const config = !finalTestIsAvailable
 			? {
 					hrefToMaterials: '/final-test',
 					progressText: <span>Доступно</span>,
@@ -139,4 +170,3 @@ function FinalTest({
 
 	return <ExerciseProgress progress={progressConfig} />;
 }
-

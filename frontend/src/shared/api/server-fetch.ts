@@ -60,6 +60,7 @@ export async function serverFetch<Result>(
 			: {
 					success: false,
 					result: null,
+					error: e.error,
 					code: e.code,
 				};
 	}

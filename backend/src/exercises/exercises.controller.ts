@@ -19,6 +19,7 @@ export class ExercisesController {
 		return this.exercisesService.getExercises({
 			type: query.type,
 			userLogin: req.userToken.login,
+			max: query.max,
 		});
 	}
 }

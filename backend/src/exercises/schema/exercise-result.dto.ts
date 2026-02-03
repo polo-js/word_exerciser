@@ -41,6 +41,9 @@ export class ExerciseExpressionsDto {
 	id: number;
 
 	@Expose()
+	index: number;
+
+	@Expose()
 	expression: string;
 
 	@Expose()
