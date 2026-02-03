@@ -62,10 +62,10 @@ export function MainWrapper({
 					>
 						<div className={cn('flex', 'flex-col', 'items-start', 'justify-center')}>
 							<div className="uppercase font-bold text-xl">
-								Платформа: Английский для закупок
+								Веб-приложение: Английский для закупок
 							</div>
 							<div className="text-lg">
-								Профессиональная платформа для изучения лексики
+								Профессиональное приложение для изучения лексики
 							</div>
 						</div>
 						<div className="flex items-center">
