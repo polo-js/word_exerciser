@@ -37,11 +37,6 @@ const MOCK_EXERCISES: IQuestionBlock[] = [
 ];
 
 function TestMainComp({ expressions = MOCK_EXERCISES, onSubmit }: Props) {
-	useEffect(() => {
-		console.log('update');
-		console.log(expressions);
-	}, [expressions]);
-
 	const [selectedByQuestionId, setSelectedByQuestionId] = React.useState<
 		Record<number, number | null>
 	>(() => {
