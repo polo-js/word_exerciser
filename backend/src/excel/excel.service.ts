@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { EXERCISES_TYPE } from '../exercises/const';
 import * as ExcelJS from 'exceljs';
+import { EXERCISES_TYPE } from '../const';
 
 type UserRow = {
 	id: number;

@@ -9,3 +9,4 @@ export enum EXERCISE_TYPE {
 }
 
 export const FINAL_TEST_THRESHOLD_PERCENT = 90;
+export const ADMIN_LOGIN = 'admin';

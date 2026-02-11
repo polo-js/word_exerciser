@@ -1,6 +1,6 @@
 import { Transform, Type } from 'class-transformer';
 import { IsIn, IsNumber, IsOptional } from 'class-validator';
-import { EXERCISES_TYPE } from '../const';
+import { EXERCISES_TYPE } from '../../const';
 
 export class ExerciseQueryDto {
 	@Transform(({ value }) => Number(value))

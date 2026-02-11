@@ -8,6 +8,7 @@ import { ProgressModule } from './progress/progress.module';
 import { MaterialsModule } from './materials/materials.module';
 import { ExercisesModule } from './exercises/exercises.module';
 import { ExcelModule } from './excel/excel.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
 	imports: [
@@ -21,6 +22,7 @@ import { ExcelModule } from './excel/excel.module';
 		}),
 		ExercisesModule,
 		ExcelModule,
+		AdminModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
