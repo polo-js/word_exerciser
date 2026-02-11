@@ -256,6 +256,35 @@ export function AdminBlock({ terms, phrases, users }: IAdminBlockProps) {
 		updateData('admin-panel');
 	};
 
+	const onDeleteExpression = async (id: number) => {
+		const currentExpression = chosenCategory.expressions.find(
+			(expression) => expression.id === id
+		);
+		if (!currentExpression) {
+			throw new Error('Удаление несуществующего элемента!');
+		}
+
+		setChosenCategory({
+			...chosenCategory,
+			expressions: chosenCategory.expressions.filter(
+				(expression) => expression.id !== id
+			),
+		});
+
+		const result = await serverFetch(`/admin/exercises-expressions?id=${id}`, {
+			method: 'DELETE',
+		});
+
+		if (!result.success) {
+			toast.error(result.error?.message ?? 'Что-то пошло не так');
+			return;
+		}
+
+		toast.success('Элемент успешно удалён');
+
+		updateData('admin-panel');
+	};
+
 	return (
 		<div className="bg-slate-50 w-full h-auto">
 			<div className="mx-auto h-full flex max-w-[1600px] gap-0 px-6 py-6">
@@ -375,6 +404,7 @@ export function AdminBlock({ terms, phrases, users }: IAdminBlockProps) {
 															? namePretty(t as UserListItem)
 															: (t as FullFormatExpression).expression
 													}
+													onDelete={onDeleteExpression}
 													onEdit={() => {
 														if (chosenTab === CHOSEN_TAB.USERS) {
 														} else {
@@ -391,7 +421,6 @@ export function AdminBlock({ terms, phrases, users }: IAdminBlockProps) {
 															});
 														}
 													}}
-													onDelete={() => {}}
 												/>
 											))}
 										</div>
@@ -438,7 +467,6 @@ export function AdminBlock({ terms, phrases, users }: IAdminBlockProps) {
 																	: ['фраза', 'фразы', 'фраз']
 															)
 														}
-														// onDelete={() => {}}
 														onClick={onCategoryClick}
 													/>
 												))}
