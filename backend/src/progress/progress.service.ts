@@ -22,7 +22,6 @@ import {
 import { ALL_EXERCISES_TYPES, ONLY_EXERCISES_TYPES } from './types/exercises-types';
 import { isDevelopment } from '../const';
 import { plainObjectToDTO } from '../shared/utils';
-import { EXERCISES_TYPE } from '../exercises/const';
 
 type IProgressByType = Record<ALL_EXERCISES_TYPES, { total: number; passed: number }>;
 

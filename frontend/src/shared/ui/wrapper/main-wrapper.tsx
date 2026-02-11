@@ -7,6 +7,7 @@ interface IMainWrapperProps extends React.PropsWithChildren {
 	fullHeight?: boolean;
 	className?: string;
 	withHeader?: boolean;
+	width?: number;
 }
 
 export function MainWrapper({
@@ -14,6 +15,7 @@ export function MainWrapper({
 	className,
 	fullHeight = false,
 	withHeader = false,
+	width,
 }: IMainWrapperProps) {
 	const pathname = usePathname();
 	const router = useRouter();
@@ -31,7 +33,12 @@ export function MainWrapper({
 
 	return (
 		<main
-			className={cn(['max-w-[1200px]', 'w-full', fullHeight && 'flex grow', className])}
+			className={cn([
+				`max-w-[${width ?? 1200}px]`,
+				'w-full',
+				fullHeight && 'flex grow',
+				className,
+			])}
 		>
 			{withHeader ? (
 				<div
