@@ -105,4 +105,9 @@ export class AdminController {
 	) {
 		return this.adminService.updateExercisesExpression(id, dto);
 	}
+
+	@Delete('exercises-expressions')
+	deleteExercisesExpression(@Query('id', ParseIntPipe) id: number) {
+		return this.adminService.deleteExercisesExpression(id);
+	}
 }

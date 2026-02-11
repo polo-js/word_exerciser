@@ -6,8 +6,16 @@ import {
 } from '@nestjs/common';
 import * as argon2 from 'argon2';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateExerciseDto, CreateExercisesExpressionDto, CreateUserDto } from './dto/create-admin.dto';
-import { UpdateExerciseDto, UpdateExercisesExpressionDto, UpdateUserDto } from './dto/update-admin.dto';
+import {
+	CreateExerciseDto,
+	CreateExercisesExpressionDto,
+	CreateUserDto,
+} from './dto/create-admin.dto';
+import {
+	UpdateExerciseDto,
+	UpdateExercisesExpressionDto,
+	UpdateUserDto,
+} from './dto/update-admin.dto';
 import { ADMIN_LOGIN, EXERCISES_TYPE } from '../const';
 
 @Injectable()
@@ -164,6 +172,14 @@ export class AdminService {
 		});
 	}
 
+	async deleteExercisesExpression(id: number) {
+		const existing = await this.prisma.exercisesExpression.findUnique({ where: { id } });
+		if (!existing) throw new NotFoundException('Exercises Expression not found');
+
+		await this.prisma.exercisesExpression.delete({ where: { id } });
+		return true;
+	}
+
 	async deleteUser(id: number) {
 		const existing = await this.prisma.user.findUnique({ where: { id } });
 		if (!existing) throw new NotFoundException('User not found');
@@ -182,22 +198,22 @@ export class AdminService {
 
 	async createExercisesExpression(dto: CreateExercisesExpressionDto) {
 		if (!dto.answerOptions || dto.answerOptions.length !== 4) {
-			throw new BadRequestException("answerOptions must have exactly 4 items");
+			throw new BadRequestException('answerOptions must have exactly 4 items');
 		}
 		if (
 			dto.correctAnswerIndex < 0 ||
 			dto.correctAnswerIndex > 3 ||
 			!Number.isInteger(dto.correctAnswerIndex)
 		) {
-			throw new BadRequestException("correctAnswerIndex must be 0..3");
+			throw new BadRequestException('correctAnswerIndex must be 0..3');
 		}
 
 		// (опционально) валидация пустых строк
 		if (dto.answerOptions.some((x) => !x?.trim())) {
-			throw new BadRequestException("answerOptions items must be non-empty");
+			throw new BadRequestException('answerOptions items must be non-empty');
 		}
 		if (!dto.expression?.trim()) {
-			throw new BadRequestException("expression is required");
+			throw new BadRequestException('expression is required');
 		}
 
 		return this.prisma.$transaction(async (tx) => {
@@ -213,7 +229,7 @@ export class AdminService {
 
 			const correct = createdAnswers[dto.correctAnswerIndex];
 			if (!correct) {
-				throw new BadRequestException("correctAnswerIndex out of range");
+				throw new BadRequestException('correctAnswerIndex out of range');
 			}
 
 			// 2) создаём expression + подключаем ответы + ставим correctAnswerId
@@ -235,7 +251,7 @@ export class AdminService {
 
 	async updateExercisesExpression(id: number, dto: UpdateExercisesExpressionDto) {
 		if (!dto.answerOptions || dto.answerOptions.length !== 4) {
-			throw new BadRequestException("answerOptions must have exactly 4 items");
+			throw new BadRequestException('answerOptions must have exactly 4 items');
 		}
 		if (
 			dto.correctAnswerIndex === undefined ||
@@ -243,12 +259,12 @@ export class AdminService {
 			dto.correctAnswerIndex < 0 ||
 			dto.correctAnswerIndex > 3
 		) {
-			throw new BadRequestException("correctAnswerIndex must be 0..3");
+			throw new BadRequestException('correctAnswerIndex must be 0..3');
 		}
 
-		const normalized = dto.answerOptions.map((s) => (s ?? "").trim());
+		const normalized = dto.answerOptions.map((s) => (s ?? '').trim());
 		if (normalized.some((s) => !s)) {
-			throw new BadRequestException("answerOptions items must be non-empty");
+			throw new BadRequestException('answerOptions items must be non-empty');
 		}
 
 		return this.prisma.$transaction(async (tx) => {
@@ -259,7 +275,7 @@ export class AdminService {
 					answerOptions: { select: { id: true } },
 				},
 			});
-			if (!existing) throw new NotFoundException("ExercisesExpression not found");
+			if (!existing) throw new NotFoundException('ExercisesExpression not found');
 
 			const oldAnswerIds = existing.answerOptions.map((a) => a.id);
 
@@ -274,7 +290,7 @@ export class AdminService {
 			);
 
 			const correct = newAnswers[dto.correctAnswerIndex];
-			if (!correct) throw new BadRequestException("correctAnswerIndex out of range");
+			if (!correct) throw new BadRequestException('correctAnswerIndex out of range');
 
 			// заменяем связи + ставим correctAnswerId
 			const updated = await tx.exercisesExpression.update({

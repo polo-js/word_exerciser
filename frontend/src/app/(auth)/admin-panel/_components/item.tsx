@@ -7,7 +7,7 @@ export function Item(props: {
 	id: number;
 	countLabel?: string;
 	onEdit?: () => void;
-	onDelete?: () => void;
+	onDelete?: (id: number) => void;
 	onClick?: (id: number) => void;
 	isChosen?: boolean;
 }) {
@@ -43,7 +43,7 @@ export function Item(props: {
 				<IconButton aria-label="Редактировать" onClick={onEdit}>
 					<PencilIcon />
 				</IconButton>
-				<IconButton aria-label="Удалить" onClick={onDelete}>
+				<IconButton aria-label="Удалить" onClick={() => onDelete?.(id)}>
 					<XIcon />
 				</IconButton>
 			</div>
